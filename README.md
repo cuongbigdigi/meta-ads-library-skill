@@ -11,8 +11,12 @@ Bộ này giúp AI agent (Claude Code, Codex) tự lấy quảng cáo đối th�
 > *English: An agent skill for Claude Code and Codex that collects competitor ads from the Meta Ad Library via a headless browser (no login, no API token), ranks likely winners by run time and variant count, and analyzes hooks, offers and CTAs. The official Ad Library API only returns political ads outside the EU, so this works for commercial ads in any country. Docs are in Vietnamese.*
 
 ## Cần có
-1. **Node.js 18 trở lên.** Mở terminal gõ `node -v`, nếu chưa có thì tải ở nodejs.org (bản LTS).
-2. **Một AI agent** chạy trong terminal: Claude Code hoặc Codex.
+> ⚠️ **Skill chỉ chạy trên máy tính (Windows/Mac), với Claude Code hoặc Codex.** Không dùng được trên claude.ai, ChatGPT bản web hay app điện thoại, vì skill cần mở trình duyệt và chạy code trên máy của bạn.
+
+1. **Claude Code hoặc Codex cài trên máy tính.** Chưa cài thì xem video hướng dẫn (video của các bạn khác, mình sẽ quay bản riêng sau):
+   - Cài Codex trên máy tính: [xem video](https://www.facebook.com/reel/1051710833986249)
+   - Cài Claude Code: [xem video](https://www.youtube.com/watch?v=ON6H2YbnoVg)
+2. **Node.js 18 trở lên.** Mở terminal gõ `node -v`, nếu chưa có thì tải ở nodejs.org (bản LTS).
 
 ## Cài đặt (khoảng 5 phút)
 1. Tải bộ này về: bấm nút xanh **Code > Download ZIP** rồi giải nén, hoặc dùng git:
