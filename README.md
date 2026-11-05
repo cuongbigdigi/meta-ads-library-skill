@@ -2,7 +2,7 @@
 
 **Skill cho Claude Code và Codex: soi quảng cáo đối thủ trên Meta Ads Library, xếp hạng ad thắng, phân tích hook, offer, CTA.**
 
-Phiên bản 1.0.0, cập nhật 04/11/2026.
+Phiên bản 1.1.0, cập nhật 05/11/2026.
 
 Bộ này giúp AI agent (Claude Code, Codex) tự lấy quảng cáo đối thủ trên thư viện quảng cáo của Meta, xếp hạng ad đang ra tiền và phân tích hook, offer, format, CTA. Không cần đăng nhập Facebook, không cần token.
 
@@ -29,6 +29,19 @@ Bộ này giúp AI agent (Claude Code, Codex) tự lấy quảng cáo đối th�
 
 Muốn tự cài không qua agent: gõ `npm install` trong thư mục này.
 
+### Cài dùng chung cho mọi dự án (Codex hoặc Claude Code)
+Không muốn mở đúng thư mục này mỗi lần? Dán link repo cho agent và nhờ cài:
+
+> https://github.com/cuongbigdigi/meta-ads-library-skill đọc nội dung và cài cho tôi
+
+Agent sẽ chép skill vào thư mục skill chung (`~/.codex/skills/` với Codex, `~/.claude/skills/` với Claude Code), clone toàn bộ repo vào thư mục `runtime/` cạnh skill, cài thư viện và chạy thử. Sau đó mở agent ở dự án nào cũng gọi được skill.
+
+![Cài skill bằng Codex](docs/codex-cai-dat.jpg)
+
+Hỏi thử ngay sau khi cài: "tìm các quảng cáo phụ kiện xe VF3":
+
+![Kết quả soi quảng cáo phụ kiện VF3](docs/codex-ket-qua.jpg)
+
 ## Cách dùng
 Chỉ cần nói với agent bằng tiếng Việt, ví dụ:
 
@@ -38,6 +51,8 @@ Chỉ cần nói với agent bằng tiếng Việt, ví dụ:
 - "So sánh offer của 5 đối thủ đứng đầu ngành mỹ phẩm thuần chay."
 
 Agent sẽ tự chạy tool, đọc kết quả và trả về bảng phân tích. File dữ liệu gốc nằm trong thư mục `output/`.
+
+Mẹo: ngách nào có nhiều cách gọi thì bảo agent quét vài từ khóa rồi gộp lại, ví dụ "quét cả phụ kiện VF3 và độ xe VF3 rồi xếp hạng chung". Ngách mới mà toàn ad vài ngày tuổi thì agent sẽ báo là ngách đang test thay vì gọi là ad thắng.
 
 ## Trong bộ này có gì
 | File | Dùng để |
@@ -73,6 +88,10 @@ Skill này được chia sẻ miễn phí từ cộng đồng **Ads AI Lo - Qu�
 - Chia sẻ kết quả soi đối thủ và cách dùng AI agent chạy quảng cáo
 
 👉 [whop.com/ads-ai-lo](https://whop.com/ads-ai-lo/)
+
+## Thay đổi
+- **1.1.0 (05/11/2026)**: skill tự tìm thư mục chạy khi cài dùng chung (Codex/Claude Code); `rank.js` gộp được nhiều file từ khóa, thêm `--test-variants` và hướng dẫn xử lý ngách mới toàn ad đang test.
+- **1.0.0 (04/11/2026)**: bản đầu tiên.
 
 ## Giấy phép
 MIT. Dùng, sửa, chia sẻ tự do. Xem file `LICENSE`.

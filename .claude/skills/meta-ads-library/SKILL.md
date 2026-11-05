@@ -5,8 +5,17 @@ description: "Nghiên cứu quảng cáo đối thủ qua Meta Ads Library (thư
 
 # Meta Ads Library: soi quảng cáo đối thủ
 
-Các lệnh bên dưới chạy từ thư mục gốc dự án (nơi có `package.json`).
-Nếu chưa có thư mục `node_modules`, chạy `npm install` trước.
+## Thư mục chạy (đọc trước khi chạy lệnh)
+Mọi lệnh bên dưới chạy từ **thư mục gốc của bộ skill**: thư mục có `package.json` và `tools/ad-library/scrape.js`. Tìm theo thứ tự:
+1. Thư mục dự án hiện tại (người dùng mở agent ngay trong thư mục đã tải về).
+2. Thư mục `runtime/` nằm cạnh file SKILL.md này (khi skill được cài dùng chung cho mọi dự án, ví dụ `~/.codex/skills/meta-ads-library/runtime` hoặc `~/.claude/skills/meta-ads-library/runtime`).
+3. Không thấy ở đâu: clone repo vào `runtime/` cạnh file SKILL.md này rồi dùng thư mục đó:
+   ```bash
+   git clone https://github.com/cuongbigdigi/meta-ads-library-skill.git runtime
+   ```
+
+Nếu thư mục gốc chưa có `node_modules`, chạy `npm install` ở đó trước (lần đầu tải thêm Chromium khoảng 150 MB).
+Kết quả nằm trong `output/` của thư mục gốc đó, không phải thư mục dự án người dùng đang mở.
 
 ## Quy trình
 
@@ -20,14 +29,18 @@ node tools/ad-library/scrape.js --page-id 123456789 --status all --max 100
 Tham số: `--country VN` (mặc định), `--status active|inactive|all`, `--media all|image|video`, `--out file.json`, `--headed` (hiện trình duyệt để kiểm tra).
 Kết quả lưu ở `output/<từ-khóa>-<country>-<ngày>.json`. Mất khoảng 30-90 giây.
 
+Một từ khóa thường bỏ sót đối thủ. Nên quét 2-3 cách gọi khác nhau của cùng ngách (ví dụ "phụ kiện vf3", "độ xe vf3"), rồi xếp hạng gộp ở bước 2.
+
 ### 2. Xếp hạng ad thắng
 ```bash
-node tools/ad-library/rank.js output/<file>.json --top 15 --match "từ khóa 1|từ khóa 2"
+node tools/ad-library/rank.js output/<file1>.json output/<file2>.json --top 15 --match "từ khóa 1|từ khóa 2"
 ```
+- Truyền nhiều file để gộp nhiều từ khóa, ad trùng chỉ tính 1 lần.
 - Điểm = số ngày chạy + 2 × số biến thể. Không ai đốt tiền nhiều ngày vào ad lỗ, nên ad chạy lâu và nhân bản nhiều thường là ad đang ra tiền.
 - `--min-days 7` (mặc định): bỏ ad chạy chưa đủ 7 ngày.
 - `--match`: chỉ giữ ad có tên page/tiêu đề/nội dung khớp, dùng để loại ad lạc đề. Nên luôn truyền các từ khóa liên quan đến ngành người dùng hỏi.
-- Mục "Đang test": ad mới nhưng nhân bản nhiều, tức đối thủ đang thử nghiệm.
+- Mục "Đang test": ad chưa đủ ngày nhưng có từ 3 biến thể (`--test-variants N`), tức đối thủ đang thử nghiệm.
+- **Ngách mới, toàn ad vài ngày tuổi** (top ad trống): không kết luận "ad thắng". Báo người dùng đây là ngách đang test, phân tích từ mục "Đang test" và các page chạy nhiều ad gần giống nhau. Có thể thử `--min-days 3` hoặc quét lại với `--status all` để thấy cả ad đã tắt.
 
 ### 3. Phân tích (agent tự làm, đọc file JSON)
 Với các ad top đầu, trình bày bảng:
@@ -35,7 +48,7 @@ Với các ad top đầu, trình bày bảng:
 |---|---|
 | Hook | Câu mở đầu, kiểu gì (nỗi đau, con số, câu hỏi, bằng chứng xã hội) |
 | Offer | Giá, quà tặng, freeship, combo, bảo hành |
-| Format | VIDEO / IMAGE / MULTI_IMAGES (carousel) |
+| Format | VIDEO / IMAGE / MULTI_IMAGES, CAROUSEL (nhiều ảnh) / DCO (Facebook tự ghép biến thể) / DPA (catalog) |
 | CTA | Gửi tin nhắn, Mua ngay, Đăng ký... |
 | Mục tiêu | CTA nhắn tin = chạy tin nhắn; có `link_url` = chạy về website |
 | Thời gian | days_running, variants |
