@@ -2,9 +2,9 @@
 
 **Skill cho Claude Code và Codex: soi quảng cáo đối thủ trên Meta Ads Library, xếp hạng ad thắng, phân tích hook, offer, CTA.**
 
-Phiên bản 1.2.0, cập nhật 05/11/2026.
+Phiên bản 1.3.0, cập nhật 05/11/2026.
 
-Bộ này giúp AI agent (Claude Code, Codex) tự lấy quảng cáo đối thủ trên thư viện quảng cáo của Meta, xếp hạng ad đang ra tiền và phân tích hook, offer, format, CTA. Không cần đăng nhập Facebook, không cần token.
+Bộ này giúp AI agent (Claude Code, Codex) tự lấy quảng cáo đối thủ trên thư viện quảng cáo của Meta, xếp hạng ad đang ra tiền và đối thủ mạnh nhất ngách, phân tích hook, offer, format, CTA, soi landing page, tải ảnh/video ad về máy, xuất báo cáo HTML và theo dõi đối thủ mỗi ngày. Không cần đăng nhập Facebook, không cần token.
 
 👉 **Tham gia nhóm Zalo Ads AI lo - Tự động hóa quảng cáo: [zalo.me/g/37yoic8thaeho75yicnb](https://zalo.me/g/37yoic8thaeho75yicnb)** để hỏi đáp khi cài đặt, nhận bản cập nhật khi Facebook đổi cấu trúc và học thêm cách dùng AI chạy quảng cáo.
 
@@ -16,7 +16,7 @@ Bộ này giúp AI agent (Claude Code, Codex) tự lấy quảng cáo đối th�
 1. **Claude Code hoặc Codex cài trên máy tính.** Chưa cài thì xem video hướng dẫn (video của các bạn khác, mình sẽ quay bản riêng sau):
    - Cài Codex trên máy tính: [xem video](https://www.facebook.com/reel/1051710833986249)
    - Cài Claude Code: [xem video](https://www.youtube.com/watch?v=ON6H2YbnoVg)
-2. **Node.js 18 trở lên.** Mở terminal gõ `node -v`, nếu chưa có thì tải ở nodejs.org (bản LTS).
+2. **Node.js 18 trở lên.** Không cần tự cài: chưa có thì agent sẽ cài giúp ở bước cài đặt. Muốn tự cài thì tải bản LTS ở nodejs.org.
 
 ## Cài đặt (khoảng 5 phút)
 1. Tải bộ này về: bấm nút xanh **Code > Download ZIP** rồi giải nén, hoặc dùng git:
@@ -29,7 +29,7 @@ Bộ này giúp AI agent (Claude Code, Codex) tự lấy quảng cáo đối th�
    > Cài đặt dự án này: chạy npm install rồi chạy thử skill meta-ads-library với từ khóa "kem chống nắng", lấy 20 ad.
 
    Agent sẽ cài thư viện, tải trình duyệt Chromium (khoảng 150 MB, chỉ tải lần đầu) và chạy thử.
-4. Thấy báo `OK 20 ads` là xong.
+4. Thấy báo `OK 20 ads` là xong. Chưa được thì gõ `npm run doctor` (hoặc nhờ agent chạy): lệnh này kiểm tra từng bước và chỉ cách sửa.
 
 Muốn tự cài không qua agent: gõ `npm install` trong thư mục này.
 
@@ -47,12 +47,27 @@ Hỏi thử ngay sau khi cài: "tìm các quảng cáo phụ kiện xe VF3":
 ![Kết quả soi quảng cáo phụ kiện VF3](docs/codex-ket-qua.jpg)
 
 ## Cách dùng
-Chỉ cần nói với agent bằng tiếng Việt, ví dụ:
+Chỉ cần nói với agent bằng tiếng Việt. Không biết hỏi gì thì copy câu mẫu dưới đây, thay phần trong ngoặc vuông.
 
-- "Soi đối thủ ngành nến thơm, cho anh top 10 ad thắng và phân tích."
-- "Đối thủ đang chạy ads gì cho sản phẩm máy lọc nước? Đề xuất 3 góc test cho em."
-- "Quét toàn bộ quảng cáo của page có ID 123456789, kể cả ad đã tắt."
-- "So sánh offer của 5 đối thủ đứng đầu ngành mỹ phẩm thuần chay."
+### Câu lệnh mẫu theo mục tiêu
+| Muốn | Câu mẫu |
+|---|---|
+| Tìm ad đang ra tiền | "Soi ngách [nến thơm], cho anh top 10 ad chạy lâu nhất và phân tích hook, offer." |
+| Biết đối thủ là ai | "Ngách [máy lọc nước] có những page nào chạy ads mạnh nhất? Xếp hạng giúp em." |
+| Soi kỹ 1 đối thủ | "Quét toàn bộ quảng cáo của page [link hoặc ID page], kể cả ad đã tắt. Họ test gì, giữ gì?" |
+| Lấy ý tưởng hook | "Gom các kiểu hook đang dùng trong ngách [mỹ phẩm thuần chay], mỗi kiểu 2 ví dụ." |
+| So giá, so offer | "So sánh giá, combo, quà tặng của 5 đối thủ đứng đầu ngách [đồ ăn vặt], soi cả landing page." |
+| Chuẩn bị mùa | "Ngách [hồng sâm] đang chạy gì cho Tết? Ad nào mới lên trong 2 tuần nay?" |
+| Tìm khoảng trống | "Ngách [phụ kiện VF3] còn góc nào chưa ai khai thác? Đề xuất 3 góc test cho shop em: [sản phẩm, giá, khách hàng]." |
+| Viết ads luôn | "Từ các ad thắng ngách [nến thơm], viết 10 hook và 2 kịch bản video 15 giây cho sản phẩm của em: [mô tả]." |
+| Lưu creative | "Tải ảnh và video của top 10 ad về máy." |
+| Báo cáo gửi khách | "Xuất báo cáo HTML có ảnh cho ngách [hồng sâm] để em gửi khách." |
+| Theo dõi hằng ngày | "Theo dõi ngách [nến thơm] và 5 đối thủ mạnh nhất, quét mỗi sáng 8h." |
+
+Mẹo để kết quả tốt hơn:
+- **Nói rõ sản phẩm của bạn** (giá, bán cho ai, chốt qua tin nhắn hay web) thì góc test và hook sẽ sát hơn. Không nói thì agent sẽ hỏi.
+- **Ngách có nhiều cách gọi** thì bảo agent quét vài từ khóa rồi gộp lại, ví dụ "quét cả phụ kiện VF3 và độ xe VF3 rồi xếp hạng chung".
+- **Ngách mới** mà toàn ad vài ngày tuổi thì agent sẽ báo là ngách đang test thay vì gọi là ad thắng.
 
 Agent sẽ tự chạy tool, đọc kết quả và trả về bảng phân tích. File dữ liệu gốc nằm trong thư mục `output/`.
 
@@ -65,8 +80,6 @@ Claude quét 9 từ khóa và 14 page shop sâm (853 ad), lọc ra ad chạy lâ
 
 ![3 góc nên test cho ngách sâm](docs/claude-sam-goc-test.png)
 
-Mẹo: ngách nào có nhiều cách gọi thì bảo agent quét vài từ khóa rồi gộp lại, ví dụ "quét cả phụ kiện VF3 và độ xe VF3 rồi xếp hạng chung". Ngách mới mà toàn ad vài ngày tuổi thì agent sẽ báo là ngách đang test thay vì gọi là ad thắng.
-
 ## Theo dõi ngành hàng và đối thủ định kỳ
 Muốn máy tự quét mỗi sáng và báo khi đối thủ ra ad mới? Nói với agent:
 
@@ -77,7 +90,9 @@ Agent sẽ tạo file `watchlist.json` (danh sách từ khóa + page đối th�
 - **Ad vừa sống qua mốc 7/14/30 ngày**: ứng viên ad thắng, nên xem kỹ.
 - **Ad đối thủ đã tắt**: thường là ad không hiệu quả.
 
-Báo cáo nằm ở `output/watch/latest.md`, gửi Discord nếu có webhook. Hỏi agent "đối thủ có gì mới?" là nó đọc báo cáo và phân tích.
+- **Xu hướng số ad** của từng đối thủ qua các lần quét: tăng mạnh nghĩa là họ đang đẩy ngân sách.
+
+Báo cáo nằm ở `output/watch/latest.md`, gửi Discord hoặc Telegram nếu có cấu hình. Hỏi agent "đối thủ có gì mới?" là nó đọc báo cáo và phân tích.
 
 Tự chạy tay: copy `watchlist.example.json` thành `watchlist.json`, sửa từ khóa/page, rồi gõ `npm run watch`.
 
@@ -88,7 +103,12 @@ Lưu ý: máy tính phải đang bật lúc đến giờ quét. Nên theo dõi d
 |---|---|
 | `tools/ad-library/scrape.js` | Mở thư viện quảng cáo, lấy dữ liệu ad |
 | `tools/ad-library/rank.js` | Xếp hạng ad thắng (chạy lâu, nhiều biến thể) |
-| `tools/ad-library/watch.js` | Theo dõi định kỳ: so với lần quét trước, báo ad mới / qua mốc ngày / đã tắt |
+| `tools/ad-library/pages.js` | Xếp hạng đối thủ trong ngách (số ad, ad mới, ad sống lâu) |
+| `tools/ad-library/report.js` | Xuất báo cáo HTML có ảnh, mở bằng trình duyệt |
+| `tools/ad-library/download.js` | Tải ảnh/video của top ad về máy |
+| `tools/ad-library/lp.js` | Soi landing page: giá, ưu đãi, cách chốt đơn |
+| `tools/ad-library/watch.js` | Theo dõi định kỳ: so với lần quét trước, báo ad mới / qua mốc ngày / đã tắt / xu hướng |
+| `tools/ad-library/doctor.js` | Kiểm tra máy (`npm run doctor`) khi cài lỗi |
 | `watchlist.example.json` | Mẫu danh sách từ khóa + page đối thủ cần theo dõi |
 | `.claude/skills/meta-ads-library/SKILL.md` | Skill cho Claude Code: khi nào dùng, quy trình, cách phân tích |
 | `AGENTS.md` | Để Codex biết skill này |
@@ -96,8 +116,25 @@ Lưu ý: máy tính phải đang bật lúc đến giờ quét. Nên theo dõi d
 
 Thư mục `.claude` có thể bị ẩn trên Windows/Mac. Không sao, agent vẫn thấy.
 
+## Câu hỏi thường gặp
+**Có mất phí không?** Skill miễn phí. Bạn chỉ trả phí gói Claude hoặc ChatGPT/Codex mà bạn đang dùng.
+
+**Có bị khóa nick Facebook không?** Không. Tool mở thư viện quảng cáo công khai như khách vãng lai, không đăng nhập, không dùng tài khoản của bạn.
+
+**Có dùng trên điện thoại hoặc claude.ai, ChatGPT bản web được không?** Không. Skill cần chạy trên máy tính (Windows hoặc Mac) với Claude Code hoặc Codex.
+
+**Sao không thấy số tiền đối thủ chi?** Meta không công khai chi tiêu của quảng cáo bán hàng. Tool dùng số ngày chạy và số biến thể làm tín hiệu thay thế: ad chạy càng lâu, nhân bản càng nhiều thì càng có khả năng đang ra tiền.
+
+**Sao ra ít ad, hoặc ra ad không liên quan?** Từ khóa được tìm đúng cụm từ, nên cụm quá hẹp sẽ ra ít. Thử cách gọi khác mà người bán hay viết trong ad (ví dụ "hồng sâm" thay vì "nhân sâm Panax"). Nếu lẫn ad lạc đề, bảo agent "chỉ giữ ad liên quan đến [ngành]".
+
+**Theo dõi định kỳ có chạy khi tắt máy không?** Không. Máy phải đang bật lúc đến giờ quét. Lần quét sau sẽ so với lần gần nhất nên không mất dữ liệu.
+
+**Dùng cho thị trường nước ngoài được không?** Được. Bảo agent "quét thị trường Thái Lan / Mỹ..." (tham số `--country TH`, `US`...).
+
 ## Khi gặp lỗi
-Mô tả lỗi cho agent và nhờ nó sửa. Một số câu mẫu:
+Cách nhanh nhất: gõ `npm run doctor` (hoặc nhờ agent chạy). Lệnh này kiểm tra Node, thư viện, trình duyệt, quét thử 3 ad và chỉ cách sửa từng lỗi. Chụp màn hình kết quả gửi vào nhóm Zalo nếu vẫn không được.
+
+Hoặc mô tả lỗi cho agent và nhờ nó sửa. Một số câu mẫu:
 
 - **Ra 0 ad:** "Tool ra 0 ad. Chạy lại với --headed xem trang có hiện quảng cáo không. Nếu có thì bắt lại dữ liệu mạng /api/graphql, xem cấu trúc đổi thế nào rồi sửa scrape.js."
 - **Kết quả lẫn ad không liên quan:** "Xếp hạng lại, chỉ giữ ad liên quan đến [ngành của bạn]."
@@ -121,6 +158,12 @@ Skill này được chia sẻ miễn phí từ nhóm **Ads AI lo - Tự động 
 👉 [zalo.me/g/37yoic8thaeho75yicnb](https://zalo.me/g/37yoic8thaeho75yicnb)
 
 ## Thay đổi
+- **1.3.0 (05/11/2026)**:
+  - Sửa lỗi quan trọng: tìm theo từ khóa giờ **khớp đúng cụm từ** (trước đây khớp lỏng, ra nhiều ad lạc đề) và **ưu tiên ad nhiều hiển thị** (trước đây ra toàn ad mới 1 ngày nên khó thấy ad thắng). Thêm `--sort new` và `--loose` khi cần kiểu cũ.
+  - Tool mới: `pages.js` xếp hạng đối thủ, `report.js` báo cáo HTML có ảnh, `download.js` tải creative, `lp.js` soi landing page, `doctor.js` kiểm tra máy.
+  - Theo dõi định kỳ: thêm xu hướng số ad và gửi Telegram.
+  - Skill hỏi thông tin sản phẩm trước khi đề xuất góc test, biết viết hook/kịch bản từ insight, gợi ý bước tiếp theo.
+  - README: câu lệnh mẫu theo mục tiêu, câu hỏi thường gặp.
 - **1.2.0 (05/11/2026)**: thêm `watch.js` theo dõi ngành hàng + đối thủ định kỳ (ad mới, ad qua mốc 7/14/30 ngày, ad đã tắt), hẹn giờ trên máy, gửi Discord.
 - **1.1.0 (05/11/2026)**: skill tự tìm thư mục chạy khi cài dùng chung (Codex/Claude Code); `rank.js` gộp được nhiều file từ khóa, thêm `--test-variants` và hướng dẫn xử lý ngách mới toàn ad đang test.
 - **1.0.0 (04/11/2026)**: bản đầu tiên.

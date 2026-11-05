@@ -3,11 +3,24 @@
   "max_per_keyword": 60,
   "max_per_page": 100,
   "keywords": [
-    { "q": "hồng sâm hàn quốc", "match": "sâm|ginseng" },
-    { "q": "nước hồng sâm", "match": "sâm|ginseng" }
+    {
+      "q": "hồng sâm hàn quốc",
+      "match": "sâm|ginseng"
+    },
+    {
+      "q": "nước hồng sâm",
+      "match": "sâm|ginseng"
+    }
   ],
   "pages": [
-    { "id": "123456789", "name": "Đối thủ A" }
+    {
+      "id": "123456789",
+      "name": "Đối thủ A"
+    }
   ],
-  "discord_webhook": ""
+  "discord_webhook": "",
+  "telegram": {
+    "bot_token": "",
+    "chat_id": ""
+  }
 }

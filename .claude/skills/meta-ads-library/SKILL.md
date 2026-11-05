@@ -1,6 +1,6 @@
 ---
 name: meta-ads-library
-description: "Nghiên cứu quảng cáo đối thủ qua Meta Ads Library (thư viện quảng cáo Facebook): lấy ads đang chạy theo từ khóa hoặc Page ID, xếp hạng ad thắng (chạy lâu, nhiều biến thể), phân tích hook/offer/format/CTA và đề xuất góc test. Dùng khi người dùng nói: soi đối thủ, spy ads, ads library, thư viện quảng cáo, đối thủ đang chạy ads gì, tìm ad thắng, nghiên cứu creative đối thủ, competitor ads, theo dõi đối thủ định kỳ, quét ads hằng ngày, báo khi đối thủ ra ad mới."
+description: "Nghiên cứu quảng cáo đối thủ qua Meta Ads Library (thư viện quảng cáo Facebook): lấy ads đang chạy theo từ khóa hoặc Page ID, xếp hạng ad thắng (chạy lâu, nhiều biến thể), xếp hạng đối thủ trong ngách, phân tích hook/offer/format/CTA, soi landing page, tải creative, xuất báo cáo HTML, viết hook/kịch bản từ insight và theo dõi định kỳ. Dùng khi người dùng nói: soi đối thủ, spy ads, ads library, thư viện quảng cáo, đối thủ đang chạy ads gì, tìm ad thắng, nghiên cứu creative đối thủ, competitor ads, theo dõi đối thủ định kỳ, quét ads hằng ngày, báo khi đối thủ ra ad mới, tải ảnh video ad đối thủ, xuất báo cáo đối thủ."
 ---
 
 # Meta Ads Library: soi quảng cáo đối thủ
@@ -14,8 +14,18 @@ Mọi lệnh bên dưới chạy từ **thư mục gốc của bộ skill**: th�
    git clone https://github.com/cuongbigdigi/meta-ads-library-skill.git runtime
    ```
 
-Nếu thư mục gốc chưa có `node_modules`, chạy `npm install` ở đó trước (lần đầu tải thêm Chromium khoảng 150 MB).
+Nếu thư mục gốc chưa có `node_modules`, chạy `npm install` ở đó trước (lần đầu tải thêm Chromium khoảng 150 MB). Nếu máy chưa có Node.js 18+, cài giúp người dùng (bản LTS) rồi tiếp tục.
+Lỗi lạ khi chạy: chạy `npm run doctor`, nó kiểm Node, thư viện, trình duyệt, quét thử 3 ad và chỉ cách sửa.
 Kết quả nằm trong `output/` của thư mục gốc đó, không phải thư mục dự án người dùng đang mở.
+
+## Bước 0. Hỏi nhanh trước khi làm
+- **Chỉ muốn xem thị trường** ("đối thủ đang chạy gì", "soi ngách X"): làm luôn, không hỏi.
+- **Muốn góc test, viết ads, hook, kịch bản**: hỏi gộp 1 lần (người dùng bỏ qua câu nào thì tự suy luận và nói rõ giả định):
+  1. Sản phẩm của bạn là gì, giá bao nhiêu?
+  2. Bán cho ai (giới tính, tuổi, khu vực, mua dùng hay mua biếu)?
+  3. Chốt đơn qua đâu (tin nhắn, website, sàn)?
+  4. Điểm mạnh khác đối thủ (nếu có)?
+- Không rõ từ khóa: tự nghĩ 2-3 cách gọi phổ biến của ngách (cách người bán viết trong ad, không phải tên khoa học).
 
 ## Quy trình
 
@@ -26,21 +36,25 @@ node tools/ad-library/scrape.js --q "kem chống nắng" --max 60
 # Theo Page đối thủ (page_id có trong kết quả tìm từ khóa)
 node tools/ad-library/scrape.js --page-id 123456789 --status all --max 100
 ```
-Tham số: `--country VN` (mặc định), `--status active|inactive|all`, `--media all|image|video`, `--out file.json`, `--headed` (hiện trình duyệt để kiểm tra).
+Tham số:
+- `--sort top` (mặc định): ad nhiều lượt hiển thị trước, là nơi có ad chạy lâu, ad thắng. `--sort new`: ad mới lên trước, dùng khi muốn xem đối thủ vừa tung gì.
+- Từ khóa mặc định **khớp đúng cụm từ**. `--loose` khớp lỏng từng chữ: ra nhiều ad hơn nhưng lẫn rất nhiều ad lạc đề, chỉ dùng khi cụm từ ra quá ít.
+- `--country VN` (mặc định), `--status active|inactive|all`, `--media all|image|video`, `--out file.json`, `--headed` (hiện trình duyệt để kiểm tra).
+
 Kết quả lưu ở `output/<từ-khóa>-<country>-<ngày>.json`. Mất khoảng 30-90 giây.
+Một từ khóa thường bỏ sót đối thủ. Nên quét 2-3 cách gọi khác nhau của cùng ngách (ví dụ "phụ kiện vf3", "độ xe vf3"), rồi gộp ở các bước sau (mọi tool đều nhận nhiều file).
 
-Một từ khóa thường bỏ sót đối thủ. Nên quét 2-3 cách gọi khác nhau của cùng ngách (ví dụ "phụ kiện vf3", "độ xe vf3"), rồi xếp hạng gộp ở bước 2.
-
-### 2. Xếp hạng ad thắng
+### 2. Xếp hạng ad thắng và đối thủ
 ```bash
 node tools/ad-library/rank.js output/<file1>.json output/<file2>.json --top 15 --match "từ khóa 1|từ khóa 2"
+node tools/ad-library/pages.js output/<file1>.json output/<file2>.json --top 10 --match "từ khóa 1|từ khóa 2"
 ```
-- Truyền nhiều file để gộp nhiều từ khóa, ad trùng chỉ tính 1 lần.
-- Điểm = số ngày chạy + 2 × số biến thể. Không ai đốt tiền nhiều ngày vào ad lỗ, nên ad chạy lâu và nhân bản nhiều thường là ad đang ra tiền.
-- `--min-days 7` (mặc định): bỏ ad chạy chưa đủ 7 ngày.
-- `--match`: chỉ giữ ad có tên page/tiêu đề/nội dung khớp, dùng để loại ad lạc đề. Nên luôn truyền các từ khóa liên quan đến ngành người dùng hỏi.
-- Mục "Đang test": ad chưa đủ ngày nhưng có từ 3 biến thể (`--test-variants N`), tức đối thủ đang thử nghiệm.
-- **Ngách mới, toàn ad vài ngày tuổi** (top ad trống): không kết luận "ad thắng". Báo người dùng đây là ngách đang test, phân tích từ mục "Đang test" và các page chạy nhiều ad gần giống nhau. Có thể thử `--min-days 3` hoặc quét lại với `--status all` để thấy cả ad đã tắt.
+- `rank.js`: điểm = số ngày chạy + 2 × số biến thể. Không ai đốt tiền nhiều ngày vào ad lỗ, nên ad chạy lâu và nhân bản nhiều thường là ad đang ra tiền.
+  - `--min-days 7` (mặc định): bỏ ad chạy chưa đủ 7 ngày.
+  - Mục "Đang test": ad chưa đủ ngày nhưng có từ 3 biến thể (`--test-variants N`), tức đối thủ đang thử nghiệm.
+- `pages.js`: xếp page theo số ad, số ad mới 7 ngày (đang đẩy mạnh), ad sống lâu nhất, format/CTA chính, website. `--watchlist` in sẵn đoạn JSON để đưa vào theo dõi.
+- `--match`: chỉ giữ ad có tên page/tiêu đề/nội dung khớp. **Luôn truyền** các từ liên quan đến ngành.
+- **Ngách mới, toàn ad vài ngày tuổi** (top ad trống): không kết luận "ad thắng". Báo người dùng đây là ngách đang test, phân tích từ mục "Đang test" và các page chạy nhiều ad gần giống nhau. Có thể thử `--min-days 3` hoặc quét lại với `--status all`.
 
 ### 3. Phân tích (agent tự làm, đọc file JSON)
 Với các ad top đầu, trình bày bảng:
@@ -53,15 +67,41 @@ Với các ad top đầu, trình bày bảng:
 | Mục tiêu | CTA nhắn tin = chạy tin nhắn; có `link_url` = chạy về website |
 | Thời gian | days_running, variants |
 
-Sau đó tổng hợp: pattern lặp lại giữa các đối thủ, offer phổ biến, khoảng trống chưa ai khai thác, và đề xuất 3 góc test cho sản phẩm của người dùng.
+Sau đó tổng hợp: pattern lặp lại giữa các đối thủ, offer phổ biến, khoảng trống chưa ai khai thác, và đề xuất 3 góc test cho sản phẩm của người dùng (dùng thông tin ở bước 0).
 
-### 4. Theo dõi định kỳ (khi người dùng muốn quét tự động hằng ngày/tuần)
+### 4. Đào sâu (làm khi người dùng cần, hoặc gợi ý ở cuối câu trả lời)
+- **Soi landing page** của ad chạy về website: lấy tiêu đề, giá, ưu đãi, nút chốt, có form số điện thoại không.
+  ```bash
+  node tools/ad-library/lp.js output/<file>.json --top 10 --match "..."
+  node tools/ad-library/lp.js --url https://trang-doi-thu.vn/san-pham
+  ```
+  Đọc `output/lp-<ngày>.json`, so sánh giá/combo giữa đối thủ và cách họ chốt đơn (form, Zalo, giỏ hàng). Ad tin nhắn không có trang đích, bỏ qua.
+- **Tải ảnh/video** của top ad về máy (link Facebook chỉ sống vài ngày):
+  ```bash
+  node tools/ad-library/download.js output/<file>.json --top 10 --match "..."
+  node tools/ad-library/download.js output/<file>.json --ids 123,456
+  ```
+  Lưu ở `output/creative/<ngày>/`, mỗi ad một thư mục kèm `info.txt`.
+- **Xuất báo cáo HTML có ảnh** để người dùng mở bằng trình duyệt, gửi khách/sếp:
+  1. Viết phần phân tích ở bước 3 ra file markdown, ví dụ `output/phan-tich-<ngách>.md` (dùng tiêu đề `##`, gạch đầu dòng, bảng).
+  2. Chạy:
+     ```bash
+     node tools/ad-library/report.js output/<file1>.json output/<file2>.json --title "Ngách nến thơm" --match "..." --notes output/phan-tich-<ngách>.md
+     ```
+  3. Đưa người dùng đường dẫn `output/report-<tên>-<ngày>/index.html`. Gửi cho người khác thì nén cả thư mục (có thư mục `img/`).
+- **Viết hook và kịch bản từ insight** (khi người dùng muốn làm ads luôn): dựa trên pattern của ad thắng và thông tin sản phẩm ở bước 0:
+  - 10 hook chia theo kiểu (nỗi đau, con số, câu hỏi, kể chuyện, bằng chứng, so sánh, quà/mùa vụ), mỗi hook ghi rõ học từ ad nào.
+  - 2 kịch bản video 15-30 giây: 3 giây đầu (hook + hình), thân (vấn đề → sản phẩm → bằng chứng), kết (offer + CTA).
+  - 3 caption ngắn cho ad ảnh.
+  - Viết lại theo sản phẩm người dùng, không chép nguyên văn đối thủ. Tránh hứa chữa bệnh, cam kết kết quả tuyệt đối, so sánh hạ thấp đối thủ (dễ bị Facebook từ chối).
+
+### 5. Theo dõi định kỳ (khi người dùng muốn quét tự động hằng ngày/tuần)
 1. Tạo `watchlist.json` ở thư mục gốc (copy từ `watchlist.example.json`):
-   - `keywords`: từ khóa ngành, mỗi mục `{ "q": "...", "match": "regex lọc lạc đề" }`.
-   - `pages`: page đối thủ `{ "id": "page_id", "name": "tên dễ nhớ" }`. Lấy page_id từ kết quả quét từ khóa (trường `page_id`).
-   - `discord_webhook` (không bắt buộc): link webhook Discord để nhận báo cáo.
-   Hỏi người dùng ngách và đối thủ cần theo dõi nếu chưa rõ; có thể quét từ khóa trước rồi gợi ý 5-10 page chạy nhiều ad nhất.
-2. Chạy thử: `node tools/ad-library/watch.js`. Lần đầu chỉ lưu mốc. Từ lần sau báo: ad mới, ad vừa sống qua mốc 7/14/30 ngày (ứng viên ad thắng), ad của page đối thủ đã tắt. Báo cáo ở `output/watch/latest.md`.
+   - `keywords`: từ khóa ngành, mỗi mục `{ "q": "...", "match": "regex lọc lạc đề" }`. Từ khóa mặc định quét `--sort new` để bắt ad mới.
+   - `pages`: page đối thủ `{ "id": "page_id", "name": "tên dễ nhớ" }`. Chưa biết đối thủ: quét từ khóa rồi chạy `pages.js --watchlist` lấy 5-10 page đầu.
+   - `discord_webhook` hoặc `telegram: { "bot_token": "...", "chat_id": "..." }` (không bắt buộc) để nhận báo cáo.
+   Hỏi người dùng ngách và đối thủ cần theo dõi nếu chưa rõ.
+2. Chạy thử: `node tools/ad-library/watch.js`. Lần đầu chỉ lưu mốc. Từ lần sau báo: ad mới, ad vừa sống qua mốc 7/14/30 ngày (ứng viên ad thắng), ad của page đối thủ đã tắt, xu hướng số ad qua các lần quét (đối thủ tăng ad mạnh = đang đẩy ngân sách). Báo cáo ở `output/watch/latest.md`.
 3. Hẹn giờ trên máy người dùng (hỏi giờ chạy, mặc định 8h sáng mỗi ngày). Thay `<THU_MUC_GOC>` bằng đường dẫn đầy đủ:
    - Windows:
      ```bash
@@ -73,15 +113,18 @@ Sau đó tổng hợp: pattern lặp lại giữa các đối thủ, offer phổ
 
 Lưu ý khi theo dõi: máy phải bật lúc đến giờ; mỗi mục nghỉ 15-30 giây để không bị chặn, nên giữ dưới khoảng 20 mục và chạy tối đa vài lần mỗi ngày. Ad "đã tắt" chỉ tính cho page đối thủ, vì quét từ khóa bị giới hạn số lượng.
 
+## Cuối mỗi câu trả lời
+Gợi ý 2-3 bước tiếp theo phù hợp, ví dụ: "Muốn em xuất báo cáo HTML có ảnh?", "Tải ảnh/video top 10 ad về máy?", "Soi landing page của các ad chạy web?", "Viết 10 hook cho sản phẩm của anh/chị?", "Theo dõi các page này mỗi sáng?". Người mới thường không biết tool làm được gì thêm.
+
 ## Lưu ý
 - **Không có số chi tiêu**: thư viện không cho biết chi tiêu hay doanh thu của quảng cáo thương mại. "Chạy lâu" chỉ là tín hiệu gián tiếp, phải nói rõ điều này với người dùng.
-- **Ít ad hơn `--max`**: từ khóa quá hẹp hoặc Facebook giới hạn kết quả. Thử từ khóa rộng hơn hoặc quét theo `--page-id`.
-- **Từ khóa khớp rộng**: kết quả có thể lẫn ad không liên quan. Dùng `--match` hoặc lọc tay theo `page_name`/`body`.
-- **Link ảnh/video có hạn sử dụng**: nếu người dùng cần lưu creative thì tải về ngay.
+- **Ít ad hơn `--max`**: cụm từ quá hẹp. Thử cách gọi khác, `--loose`, hoặc quét theo `--page-id`.
+- **Kết quả lẫn ad không liên quan**: dùng `--match` hoặc lọc tay theo `page_name`/`body`.
+- **Link ảnh/video có hạn sử dụng**: cần lưu creative thì chạy `download.js` ngay.
 - **Ra 0 ad**: Facebook có thể đã đổi cấu trúc dữ liệu. Chạy lại với `--headed` xem trang có hiện quảng cáo không. Nếu có, bắt lại response mạng `/api/graphql` để xem object quảng cáo giờ có dạng gì, rồi sửa hàm `walk`/`addAd` trong `scrape.js` (hiện đang tìm object có `ad_archive_id` + `snapshot`).
 - **Bị chặn hoặc bắt đăng nhập**: chờ một lúc rồi chạy lại, giảm `--max`, không chạy dồn dập.
 - **Không sao chép nguyên văn** quảng cáo của đối thủ: lấy cấu trúc và góc tiếp cận, rồi viết lại theo offer của người dùng.
 
 ## Kiểm tra
-- File JSON có `total > 0`, phần lớn ad có `body` và `start_date`.
+- File JSON có `total > 0`, phần lớn ad có `body` và `start_date`, và phần lớn ad đúng ngách (nếu lạc đề nhiều: thêm `--match` hoặc đổi từ khóa).
 - Mở thử 1-2 `library_url` để đối chiếu nội dung khớp.

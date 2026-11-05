@@ -38,7 +38,7 @@ const firstRun = !state.runs;
 const slug = s => String(s).toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-|-$/g, '');
 const targets = [
   ...(cfg.keywords || []).map(k => typeof k === 'string' ? { q: k } : k).map(k => ({
-    key: 'kw:' + slug(k.q), label: `Từ khóa "${k.q}"`, args: ['--q', k.q, '--max', String(k.max || maxKw)], match: k.match, isPage: false })),
+    key: 'kw:' + slug(k.q), label: `Từ khóa "${k.q}"`, args: ['--q', k.q, '--max', String(k.max || maxKw), '--sort', k.sort || 'new'], match: k.match, isPage: false })),
   ...(cfg.pages || []).map(p => typeof p === 'string' ? { id: p } : p).map(p => ({
     key: 'page:' + p.id, label: `Page ${p.name || p.id}`, args: ['--page-id', String(p.id), '--max', String(p.max || maxPage)], isPage: true })),
 ];
@@ -74,13 +74,18 @@ targets.forEach((t, i) => {
   const stopped = prev && t.isPage ? Object.entries(prevAds).filter(([id]) => !now[id]).map(([, p]) => p) : [];
   summary.new += fresh.length; summary.milestone += crossed.length; summary.stopped += stopped.length;
 
-  const parts = [`## ${t.label}`, `Đang thấy ${ads.length} ad${prev ? `, lần trước ${Object.keys(prevAds).length}` : ' (lần đầu, lấy làm mốc so sánh)'}.`];
+  // Xu hướng: số ad đang chạy qua các lần quét gần nhất (đối thủ tăng ad = đang đẩy mạnh)
+  const history = [...((prev && prev.history) || []), { at: stamp.slice(0, 10), ads: ads.length, new: fresh.length }].slice(-30);
+  const trend = history.length > 1 ? `
+Xu hướng ${history.length} lần quét gần nhất: ${history.slice(-8).map(h => h.ads).join(' → ')} ad` +
+    (history.length >= 3 && ads.length >= history[Math.max(0, history.length - 8)].ads * 1.5 && ads.length - history[Math.max(0, history.length - 8)].ads >= 3 ? ' (tăng mạnh, đang đẩy ngân sách)' : '') : '';
+  const parts = [`## ${t.label}`, `Đang thấy ${ads.length} ad${prev ? `, lần trước ${Object.keys(prevAds).length}` : ' (lần đầu, lấy làm mốc so sánh)'}.${trend}`];
   if (crossed.length) parts.push(`\n### Vừa sống qua mốc ${MILESTONES.join('/')} ngày (ứng viên ad thắng)`, ...crossed.sort((a, b) => b.days_running - a.days_running).map(line));
   if (fresh.length) parts.push(`\n### Ad mới (${fresh.length})`, ...fresh.sort((a, b) => b.variants - a.variants).slice(0, 15).map(line), fresh.length > 15 ? `- ... và ${fresh.length - 15} ad khác` : '');
   if (stopped.length) parts.push(`\n### Đã tắt (${stopped.length})`, ...stopped.slice(0, 10).map(p => `- [${p.page_name}] chạy ${p.days} ngày | ${p.body}\n  ${p.url}`));
   if (prev && !fresh.length && !crossed.length && !stopped.length) parts.push('Không có thay đổi đáng chú ý.');
   sections.push(parts.filter(Boolean).join('\n') + '\n');
-  state.targets[t.key] = { label: t.label, last_run: stamp, last_run_ms: Date.now(), ads: now };
+  state.targets[t.key] = { label: t.label, last_run: stamp, last_run_ms: Date.now(), ads: now, history };
 });
 
 state.runs++;
@@ -96,11 +101,13 @@ fs.writeFileSync(reportFile, report);
 fs.writeFileSync(path.join(dir, 'latest.md'), report);
 console.log(`OK ${head}\nBáo cáo: ${reportFile}`);
 
-// Gửi tóm tắt qua Discord webhook nếu có cấu hình
-const hook = cfg.discord_webhook;
-if (hook && /^https:\/\/(discord|discordapp)\.com\/api\/webhooks\//.test(hook)) {
-  const body = JSON.stringify({ content: report.length > 1900 ? report.slice(0, 1900) + '\n...(xem đầy đủ trong file báo cáo)' : report });
-  fetch(hook, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body })
-    .then(r => console.log(r.ok ? 'Đã gửi Discord' : 'Gửi Discord lỗi ' + r.status))
-    .catch(e => console.error('Gửi Discord lỗi:', e.message));
-}
+// Gửi báo cáo qua Discord webhook / Telegram bot nếu có cấu hình
+const chunks = (txt, n) => { const out = []; for (let i = 0; i < txt.length; i += n) out.push(txt.slice(i, i + n)); return out; };
+const post = (url, body, name) => fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+  .then(r => console.log(r.ok ? `Đã gửi ${name}` : `Gửi ${name} lỗi ${r.status}`)).catch(e => console.error(`Gửi ${name} lỗi:`, e.message));
+(async () => {
+  const hook = cfg.discord_webhook;
+  if (hook && /^https:\/\/(discord|discordapp)\.com\/api\/webhooks\//.test(hook)) for (const c of chunks(report, 1900).slice(0, 5)) await post(hook, { content: c }, 'Discord');
+  const tg = cfg.telegram || {};
+  if (tg.bot_token && tg.chat_id) for (const c of chunks(report, 3900).slice(0, 5)) await post(`https://api.telegram.org/bot${tg.bot_token}/sendMessage`, { chat_id: tg.chat_id, text: c, disable_web_page_preview: true }, 'Telegram');
+})();

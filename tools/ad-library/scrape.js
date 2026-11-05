@@ -10,6 +10,8 @@
  * Tham số:
  *   --country VN (mặc định) | --status active|inactive|all (mặc định active)
  *   --media all|image|video | --out file.json | --headed (hiện trình duyệt để xem)
+ *   --sort top|new (mặc định top: ad nhiều hiển thị/chạy lâu trước; new: ad mới nhất trước)
+ *   --loose (khớp lỏng từng chữ thay vì đúng cụm từ: ra nhiều ad hơn nhưng lẫn nhiều ad lạc đề)
  *   --cdp-port 9222 (gắn vào Chrome đang mở sẵn với --remote-debugging-port, dùng khi bị chặn)
  */
 const fs = require('fs');
@@ -27,8 +29,13 @@ if (!q && !pageId) { console.error('Thiếu --q "từ khóa" hoặc --page-id <i
 
 const params = new URLSearchParams({ active_status: status, ad_type: 'all', country, media_type: media });
 if (pageId) { params.set('view_all_page_id', pageId); params.set('search_type', 'page'); }
-else { params.set('q', q); params.set('search_type', 'keyword_unordered'); }
-const url = 'https://www.facebook.com/ads/library/?' + params.toString() + '&sort_data[direction]=desc&sort_data[mode]=relevancy_monthly_grouped';
+// Mặc định khớp đúng cụm từ: kiểu khớp lỏng (--loose) trả cả ad chỉ dính 1 chữ, lẫn rất nhiều ad lạc đề
+else if (flag('loose')) { params.set('q', q); params.set('search_type', 'keyword_unordered'); }
+else { params.set('q', `"${q.replace(/"/g, '')}"`); params.set('search_type', 'keyword_exact_phrase'); }
+// --sort top (mặc định): ad nhiều lượt hiển thị trước, lộ ra ad chạy lâu/ad thắng.
+// --sort new: ad mới lên trước, dùng để bắt ad đối thủ vừa tung ra.
+const sort = arg('sort', 'top') === 'new' ? '&sort_data[direction]=desc&sort_data[mode]=relevancy_monthly_grouped' : '&sort_data[direction]=desc&sort_data[mode]=total_impressions';
+const url = 'https://www.facebook.com/ads/library/?' + params.toString() + sort;
 
 const ads = new Map();
 
@@ -117,7 +124,7 @@ function parseText(t) {
   }
 
   const out = [...ads.values()].slice(0, max);
-  const dir = path.join(process.cwd(), 'output');
+  const dir = path.join(__dirname, '..', '..', 'output'); // luôn lưu ở output/ của thư mục gốc, chạy từ đâu cũng vậy
   fs.mkdirSync(dir, { recursive: true });
   const name = pageId ? 'page-' + pageId : (q || '').replace(/[^\p{L}\p{N}]+/gu, '-');
   const file = arg('out', path.join(dir, `${name}-${country}-${new Date().toISOString().slice(0, 10)}.json`));
