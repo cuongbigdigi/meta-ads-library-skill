@@ -13,8 +13,8 @@ const { parseArgs, loadAds, collapse, score, outDir } = require('./lib');
 const argv = process.argv.slice(2);
 const { opt, files } = parseArgs();
 
-// Bỏ link không phải trang bán hàng (Messenger, Zalo, chính Facebook)
-const skip = u => /facebook\.com|fb\.me|m\.me|messenger\.com|zalo\.me|wa\.me|instagram\.com/i.test(u);
+// Bỏ link không đọc được trang bán (Messenger, Zalo, Facebook, sàn TMĐT, form, link mở app)
+const skip = u => /facebook\.com|fb\.com|fb\.me|m\.me|messenger\.com|zalo\.me|wa\.me|instagram\.com|shopee\.|shp\.ee|lazada\.|tiktok\.com|onelink\.me|docs\.google\.com|forms\.gle/i.test(u);
 const urls = new Map(); // url sạch -> ad đầu tiên trỏ tới
 argv.forEach((a, i) => { if (a === '--url' && argv[i + 1]) urls.set(argv[i + 1], null); });
 if (files.length) {
