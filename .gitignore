@@ -3,3 +3,4 @@ output/
 *.log
 .DS_Store
 watchlist.json
+cai-dat.log

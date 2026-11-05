@@ -1,6 +1,6 @@
 {
   "name": "meta-ads-library-skill",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Skill cho AI agent: soi quảng cáo đối thủ trên Meta Ad Library, xếp hạng ad thắng",
   "license": "MIT",
   "private": true,

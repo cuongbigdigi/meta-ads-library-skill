@@ -16,6 +16,7 @@ Mọi lệnh bên dưới chạy từ **thư mục gốc của bộ skill**: th�
 
 Nếu thư mục gốc chưa có `node_modules`, chạy `npm install` ở đó trước (lần đầu tải thêm Chromium khoảng 150 MB). Nếu máy chưa có Node.js 18+, cài giúp người dùng (bản LTS) rồi tiếp tục.
 Lỗi lạ khi chạy: chạy `npm run doctor`, nó kiểm Node, thư viện, trình duyệt, quét thử 3 ad và chỉ cách sửa.
+Trên Windows, cài mãi không được (Node, npm, Chromium): bảo người dùng bấm đúp `cai-dat.bat` ở thư mục gốc, bộ cài tự xử lý và ghi `cai-dat.log`. Người dùng Mac cần hỗ trợ cài: hướng dẫn liên hệ nhóm Zalo https://zalo.me/g/37yoic8thaeho75yicnb.
 Kết quả nằm trong `output/` của thư mục gốc đó, không phải thư mục dự án người dùng đang mở.
 
 ## Bước 0. Hỏi nhanh trước khi làm

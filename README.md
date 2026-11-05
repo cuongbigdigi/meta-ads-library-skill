@@ -2,7 +2,7 @@
 
 **Skill cho Claude Code và Codex: soi quảng cáo đối thủ trên Meta Ads Library, xếp hạng ad thắng, phân tích hook, offer, CTA.**
 
-Phiên bản 1.3.0, cập nhật 05/11/2026.
+Phiên bản 1.4.0, cập nhật 05/11/2026.
 
 Bộ này giúp AI agent (Claude Code, Codex) tự lấy quảng cáo đối thủ trên thư viện quảng cáo của Meta, xếp hạng ad đang ra tiền và đối thủ mạnh nhất ngách, phân tích hook, offer, format, CTA, soi landing page, tải ảnh/video ad về máy, xuất báo cáo HTML và theo dõi đối thủ mỗi ngày. Không cần đăng nhập Facebook, không cần token.
 
@@ -11,30 +11,45 @@ Bộ này giúp AI agent (Claude Code, Codex) tự lấy quảng cáo đối th�
 > *English: An agent skill for Claude Code and Codex that collects competitor ads from the Meta Ad Library via a headless browser (no login, no API token), ranks likely winners by run time and variant count, and analyzes hooks, offers and CTAs. The official Ad Library API only returns political ads outside the EU, so this works for commercial ads in any country. Docs are in Vietnamese.*
 
 ## Cần có
-> ⚠️ **Skill chỉ chạy trên máy tính (Windows/Mac), với Claude Code hoặc Codex.** Không dùng được trên claude.ai, ChatGPT bản web hay app điện thoại, vì skill cần mở trình duyệt và chạy code trên máy của bạn.
+> ⚠️ **Skill chỉ chạy trên máy tính Windows, với Claude Code hoặc Codex** (Mac: liên hệ [nhóm Zalo](https://zalo.me/g/37yoic8thaeho75yicnb) để được hỗ trợ cài). Không dùng được trên claude.ai, ChatGPT bản web hay app điện thoại, vì skill cần mở trình duyệt và chạy code trên máy của bạn.
 
 1. **Claude Code hoặc Codex cài trên máy tính.** Chưa cài thì xem video hướng dẫn (video của các bạn khác, mình sẽ quay bản riêng sau):
    - Cài Codex trên máy tính: [xem video](https://www.facebook.com/reel/1051710833986249)
    - Cài Claude Code: [xem video](https://www.youtube.com/watch?v=ON6H2YbnoVg)
-2. **Node.js 18 trở lên.** Không cần tự cài: chưa có thì agent sẽ cài giúp ở bước cài đặt. Muốn tự cài thì tải bản LTS ở nodejs.org.
+2. Không cần cài gì thêm: bộ cài tự lo Node.js, thư viện và trình duyệt.
 
-## Cài đặt (khoảng 5 phút)
-1. Tải bộ này về: bấm nút xanh **Code > Download ZIP** rồi giải nén, hoặc dùng git:
-   ```bash
-   git clone https://github.com/cuongbigdigi/meta-ads-library-skill.git
-   ```
-2. Mở terminal tại thư mục vừa tải.
-3. Khởi động agent (`claude` hoặc `codex`), rồi gõ:
+## Cài đặt trên Windows: bấm đúp 1 file (khoảng 5 phút)
+1. Bấm nút xanh **Code > Download ZIP** ở đầu trang này.
+2. Bấm chuột phải vào file ZIP vừa tải, chọn **Extract All / Giải nén tất cả**. Nên giải nén ra **Desktop** hoặc **Documents** (đừng mở thẳng trong file ZIP).
+3. Mở thư mục vừa giải nén, **bấm đúp `cai-dat.bat`**.
+   - Windows hiện "Windows protected your PC"? Bấm **More info / Thông tin thêm** rồi **Run anyway / Vẫn chạy**.
+   - Windows hỏi quyền cài Node.js thì bấm **Yes**.
+4. Chờ cửa sổ đen chạy hết 6 bước, thấy chữ xanh **CÀI ĐẶT HOÀN TẤT** là xong.
 
+Bộ cài tự làm hết:
+- Cài Node.js nếu máy chưa có (hoặc bản quá cũ).
+- Cài thư viện và tải trình duyệt Chromium (khoảng 150 MB, chỉ lần đầu), tự thử lại khi mạng chập chờn.
+- Quét thử 3 quảng cáo để chắc chắn tool chạy được.
+- Cài skill dùng chung cho **cả Claude Code và Codex**, mở agent ở thư mục nào cũng gọi được.
+- Hỏi bạn có muốn mở Claude Code / Codex luôn không.
+
+Sau khi cài: **đừng xóa hoặc đổi tên thư mục đã giải nén**, skill đang dùng nó. Lỡ chuyển chỗ thì bấm đúp `cai-dat.bat` lần nữa. Có bản mới thì tải ZIP mới về và chạy lại `cai-dat.bat`.
+
+**Cài lỗi?** Màn hình sẽ ghi rõ "Cách sửa". Vẫn không được thì gửi file **`cai-dat.log`** (nằm trong thư mục đã giải nén) vào [nhóm Zalo](https://zalo.me/g/37yoic8thaeho75yicnb).
+
+**Dùng Mac?** Bộ cài tự động hiện chỉ hỗ trợ Windows. Liên hệ [nhóm Zalo](https://zalo.me/g/37yoic8thaeho75yicnb) để được hỗ trợ cài trên Mac.
+
+<details>
+<summary>Cách cài khác: nhờ agent cài (dành cho người đã quen terminal)</summary>
+
+1. Tải ZIP và giải nén, hoặc `git clone https://github.com/cuongbigdigi/meta-ads-library-skill.git`.
+2. Mở terminal tại thư mục đó, khởi động agent (`claude` hoặc `codex`) rồi gõ:
    > Cài đặt dự án này: chạy npm install rồi chạy thử skill meta-ads-library với từ khóa "kem chống nắng", lấy 20 ad.
+3. Thấy báo `OK 20 ads` là xong. Chưa được thì gõ `npm run doctor`.
+</details>
 
-   Agent sẽ cài thư viện, tải trình duyệt Chromium (khoảng 150 MB, chỉ tải lần đầu) và chạy thử.
-4. Thấy báo `OK 20 ads` là xong. Chưa được thì gõ `npm run doctor` (hoặc nhờ agent chạy): lệnh này kiểm tra từng bước và chỉ cách sửa.
-
-Muốn tự cài không qua agent: gõ `npm install` trong thư mục này.
-
-### Cài dùng chung cho mọi dự án (Codex hoặc Claude Code)
-Không muốn mở đúng thư mục này mỗi lần? Dán link repo cho agent và nhờ cài:
+### Cài bằng cách dán link cho agent
+Đã có Codex hoặc Claude Code và không muốn tải ZIP? Dán link repo cho agent và nhờ cài:
 
 > https://github.com/cuongbigdigi/meta-ads-library-skill đọc nội dung và cài cho tôi
 
@@ -120,6 +135,7 @@ Lưu ý: máy tính phải đang bật lúc đến giờ quét. Nên theo dõi d
 | `tools/ad-library/lp.js` | Soi landing page: giá, ưu đãi, cách chốt đơn |
 | `tools/ad-library/watch.js` | Theo dõi định kỳ: so với lần quét trước, báo ad mới / qua mốc ngày / đã tắt / xu hướng |
 | `tools/ad-library/doctor.js` | Kiểm tra máy (`npm run doctor`) khi cài lỗi |
+| `cai-dat.bat` + `tools/install/cai-dat.ps1` | Bộ cài 1 click cho Windows |
 | `watchlist.example.json` | Mẫu danh sách từ khóa + page đối thủ cần theo dõi |
 | `.claude/skills/meta-ads-library/SKILL.md` | Skill cho Claude Code: khi nào dùng, quy trình, cách phân tích |
 | `AGENTS.md` | Để Codex biết skill này |
@@ -132,7 +148,9 @@ Thư mục `.claude` có thể bị ẩn trên Windows/Mac. Không sao, agent v�
 
 **Có bị khóa nick Facebook không?** Không. Tool mở thư viện quảng cáo công khai như khách vãng lai, không đăng nhập, không dùng tài khoản của bạn.
 
-**Có dùng trên điện thoại hoặc claude.ai, ChatGPT bản web được không?** Không. Skill cần chạy trên máy tính (Windows hoặc Mac) với Claude Code hoặc Codex.
+**Có dùng trên điện thoại hoặc claude.ai, ChatGPT bản web được không?** Không. Skill cần chạy trên máy tính với Claude Code hoặc Codex.
+
+**Dùng Mac được không?** Tool chạy được trên Mac nhưng bộ cài 1 click chỉ có cho Windows. Liên hệ nhóm Zalo để được hỗ trợ cài.
 
 **Sao không thấy số tiền đối thủ chi?** Meta không công khai chi tiêu của quảng cáo bán hàng. Tool dùng số ngày chạy và số biến thể làm tín hiệu thay thế: ad chạy càng lâu, nhân bản càng nhiều thì càng có khả năng đang ra tiền.
 
@@ -143,7 +161,7 @@ Thư mục `.claude` có thể bị ẩn trên Windows/Mac. Không sao, agent v�
 **Dùng cho thị trường nước ngoài được không?** Được. Bảo agent "quét thị trường Thái Lan / Mỹ..." (tham số `--country TH`, `US`...).
 
 ## Khi gặp lỗi
-Cách nhanh nhất: gõ `npm run doctor` (hoặc nhờ agent chạy). Lệnh này kiểm tra Node, thư viện, trình duyệt, quét thử 3 ad và chỉ cách sửa từng lỗi. Chụp màn hình kết quả gửi vào nhóm Zalo nếu vẫn không được.
+Cách nhanh nhất trên Windows: bấm đúp lại `cai-dat.bat`, nó tự sửa phần lớn lỗi cài đặt. Hoặc gõ `npm run doctor` (hoặc nhờ agent chạy). Lệnh này kiểm tra Node, thư viện, trình duyệt, quét thử 3 ad và chỉ cách sửa từng lỗi. Chụp màn hình kết quả gửi vào nhóm Zalo nếu vẫn không được.
 
 Hoặc mô tả lỗi cho agent và nhờ nó sửa. Một số câu mẫu:
 
@@ -169,6 +187,7 @@ Skill này được chia sẻ miễn phí từ nhóm **Ads AI lo - Tự động 
 👉 [zalo.me/g/37yoic8thaeho75yicnb](https://zalo.me/g/37yoic8thaeho75yicnb)
 
 ## Thay đổi
+- **1.4.0 (05/11/2026)**: bộ cài 1 click cho Windows (`cai-dat.bat`): tự cài Node.js, thư viện, Chromium, quét thử, cài skill dùng chung cho Claude Code và Codex, ghi log `cai-dat.log` để gửi hỗ trợ. Mac liên hệ nhóm Zalo.
 - **1.3.0 (05/11/2026)**:
   - Sửa lỗi quan trọng: tìm theo từ khóa giờ **khớp đúng cụm từ** (trước đây khớp lỏng, ra nhiều ad lạc đề) và **ưu tiên ad nhiều hiển thị** (trước đây ra toàn ad mới 1 ngày nên khó thấy ad thắng). Thêm `--sort new` và `--loose` khi cần kiểu cũ.
   - Tool mới: `pages.js` xếp hạng đối thủ, `report.js` báo cáo HTML có ảnh, `download.js` tải creative, `lp.js` soi landing page, `doctor.js` kiểm tra máy.
