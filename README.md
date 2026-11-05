@@ -2,7 +2,7 @@
 
 **Skill cho Claude Code và Codex: soi quảng cáo đối thủ trên Meta Ads Library, xếp hạng ad thắng, phân tích hook, offer, CTA.**
 
-Phiên bản 1.1.0, cập nhật 05/11/2026.
+Phiên bản 1.2.0, cập nhật 05/11/2026.
 
 Bộ này giúp AI agent (Claude Code, Codex) tự lấy quảng cáo đối thủ trên thư viện quảng cáo của Meta, xếp hạng ad đang ra tiền và phân tích hook, offer, format, CTA. Không cần đăng nhập Facebook, không cần token.
 
@@ -67,11 +67,29 @@ Claude quét 9 từ khóa và 14 page shop sâm (853 ad), lọc ra ad chạy lâ
 
 Mẹo: ngách nào có nhiều cách gọi thì bảo agent quét vài từ khóa rồi gộp lại, ví dụ "quét cả phụ kiện VF3 và độ xe VF3 rồi xếp hạng chung". Ngách mới mà toàn ad vài ngày tuổi thì agent sẽ báo là ngách đang test thay vì gọi là ad thắng.
 
+## Theo dõi ngành hàng và đối thủ định kỳ
+Muốn máy tự quét mỗi sáng và báo khi đối thủ ra ad mới? Nói với agent:
+
+> Theo dõi ngành nến thơm và 5 page đối thủ chạy nhiều ad nhất, quét mỗi ngày lúc 8h sáng, gửi báo cáo về Discord webhook này: [dán link]
+
+Agent sẽ tạo file `watchlist.json` (danh sách từ khóa + page đối thủ), chạy thử rồi hẹn giờ trên máy (Task Scheduler với Windows, cron với Mac). Mỗi lần quét, tool so với lần trước và báo:
+- **Ad mới** đối thủ vừa lên.
+- **Ad vừa sống qua mốc 7/14/30 ngày**: ứng viên ad thắng, nên xem kỹ.
+- **Ad đối thủ đã tắt**: thường là ad không hiệu quả.
+
+Báo cáo nằm ở `output/watch/latest.md`, gửi Discord nếu có webhook. Hỏi agent "đối thủ có gì mới?" là nó đọc báo cáo và phân tích.
+
+Tự chạy tay: copy `watchlist.example.json` thành `watchlist.json`, sửa từ khóa/page, rồi gõ `npm run watch`.
+
+Lưu ý: máy tính phải đang bật lúc đến giờ quét. Nên theo dõi dưới khoảng 20 mục, quét 1-2 lần mỗi ngày là đủ, quét dồn dập dễ bị Facebook chặn.
+
 ## Trong bộ này có gì
 | File | Dùng để |
 |---|---|
 | `tools/ad-library/scrape.js` | Mở thư viện quảng cáo, lấy dữ liệu ad |
 | `tools/ad-library/rank.js` | Xếp hạng ad thắng (chạy lâu, nhiều biến thể) |
+| `tools/ad-library/watch.js` | Theo dõi định kỳ: so với lần quét trước, báo ad mới / qua mốc ngày / đã tắt |
+| `watchlist.example.json` | Mẫu danh sách từ khóa + page đối thủ cần theo dõi |
 | `.claude/skills/meta-ads-library/SKILL.md` | Skill cho Claude Code: khi nào dùng, quy trình, cách phân tích |
 | `AGENTS.md` | Để Codex biết skill này |
 | `package.json` | Danh sách thư viện cần cài |
@@ -103,6 +121,7 @@ Skill này được chia sẻ miễn phí từ nhóm **Ads AI lo - Tự động 
 👉 [zalo.me/g/37yoic8thaeho75yicnb](https://zalo.me/g/37yoic8thaeho75yicnb)
 
 ## Thay đổi
+- **1.2.0 (05/11/2026)**: thêm `watch.js` theo dõi ngành hàng + đối thủ định kỳ (ad mới, ad qua mốc 7/14/30 ngày, ad đã tắt), hẹn giờ trên máy, gửi Discord.
 - **1.1.0 (05/11/2026)**: skill tự tìm thư mục chạy khi cài dùng chung (Codex/Claude Code); `rank.js` gộp được nhiều file từ khóa, thêm `--test-variants` và hướng dẫn xử lý ngách mới toàn ad đang test.
 - **1.0.0 (04/11/2026)**: bản đầu tiên.
 

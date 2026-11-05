@@ -1,13 +1,14 @@
 {
   "name": "meta-ads-library-skill",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Skill cho AI agent: soi quảng cáo đối thủ trên Meta Ad Library, xếp hạng ad thắng",
   "license": "MIT",
   "private": true,
   "scripts": {
     "postinstall": "playwright install chromium",
     "scrape": "node tools/ad-library/scrape.js",
-    "rank": "node tools/ad-library/rank.js"
+    "rank": "node tools/ad-library/rank.js",
+    "watch": "node tools/ad-library/watch.js"
   },
   "dependencies": {
     "playwright": "1.59.1"
