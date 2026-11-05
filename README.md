@@ -80,6 +80,17 @@ Claude quét 9 từ khóa và 14 page shop sâm (853 ad), lọc ra ad chạy lâ
 
 ![3 góc nên test cho ngách sâm](docs/claude-sam-goc-test.png)
 
+### Ví dụ: báo cáo HTML xuất bằng `report.js`
+Câu lệnh: "Soi ngách hồng sâm Hàn Quốc, soi cả landing page, rồi xuất báo cáo HTML có ảnh cho anh." Agent quét 4 từ khóa, lọc còn 152 ad đúng ngách, soi 8 landing page, viết phần phân tích rồi xuất ra 1 trang HTML mở bằng trình duyệt nào cũng được:
+
+![Báo cáo HTML: tổng quan và phân tích](docs/bao-cao-tong-quan.jpg)
+
+![Báo cáo HTML: ad thắng kèm ảnh](docs/bao-cao-ad-thang.jpg)
+
+![Báo cáo HTML: đối thủ chạy nhiều nhất, format và CTA](docs/bao-cao-doi-thu.jpg)
+
+> *Ghi chú: đây là ngách mình chọn ngẫu nhiên để test tool, không nhằm quảng bá hay đánh giá quảng cáo của bất kỳ page nào. Toàn bộ dữ liệu lấy từ Thư viện quảng cáo công khai của Meta.*
+
 ## Theo dõi ngành hàng và đối thủ định kỳ
 Muốn máy tự quét mỗi sáng và báo khi đối thủ ra ad mới? Nói với agent:
 
