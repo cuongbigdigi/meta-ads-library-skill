@@ -6,7 +6,7 @@ Phiên bản 1.1.0, cập nhật 05/11/2026.
 
 Bộ này giúp AI agent (Claude Code, Codex) tự lấy quảng cáo đối thủ trên thư viện quảng cáo của Meta, xếp hạng ad đang ra tiền và phân tích hook, offer, format, CTA. Không cần đăng nhập Facebook, không cần token.
 
-👉 **Tham gia cộng đồng Ads AI Lo (Quảng cáo AI lo) trên Whop: [whop.com/ads-ai-lo](https://whop.com/ads-ai-lo/)** để hỏi đáp khi cài đặt, nhận bản cập nhật khi Facebook đổi cấu trúc và học thêm cách dùng AI chạy quảng cáo.
+👉 **Tham gia nhóm Zalo Ads AI lo - Tự động hóa quảng cáo: [zalo.me/g/37yoic8thaeho75yicnb](https://zalo.me/g/37yoic8thaeho75yicnb)** để hỏi đáp khi cài đặt, nhận bản cập nhật khi Facebook đổi cấu trúc và học thêm cách dùng AI chạy quảng cáo.
 
 > *English: An agent skill for Claude Code and Codex that collects competitor ads from the Meta Ad Library via a headless browser (no login, no API token), ranks likely winners by run time and variant count, and analyzes hooks, offers and CTAs. The official Ad Library API only returns political ads outside the EU, so this works for commercial ads in any country. Docs are in Vietnamese.*
 
@@ -82,7 +82,7 @@ Mô tả lỗi cho agent và nhờ nó sửa. Một số câu mẫu:
 - **Cần lưu ảnh/video quảng cáo:** "Tải ảnh và video của top 10 ad về thư mục creative/." Link ảnh/video sẽ hết hạn sau vài ngày nên cần tải ngay.
 - **Lỗi khi cài:** "npm install bị lỗi này: [dán lỗi]. Sửa giúp tôi."
 
-Nhờ agent mà vẫn chưa xong? Hỏi trực tiếp trong [cộng đồng trên Whop](https://whop.com/ads-ai-lo/).
+Nhờ agent mà vẫn chưa xong? Hỏi trực tiếp trong [nhóm Zalo Ads AI lo](https://zalo.me/g/37yoic8thaeho75yicnb).
 
 ## Lưu ý
 - Thư viện quảng cáo **không cho biết chi tiêu hay doanh thu**. "Chạy lâu, nhiều biến thể" chỉ là tín hiệu gián tiếp cho thấy ad đang hiệu quả.
@@ -90,13 +90,13 @@ Nhờ agent mà vẫn chưa xong? Hỏi trực tiếp trong [cộng đồng trê
 - Đây là công cụ nghiên cứu. Việc tự động lấy dữ liệu có thể không phù hợp với điều khoản sử dụng của Meta. Hãy dùng vừa phải, không chạy dồn dập. Người dùng tự chịu trách nhiệm khi sử dụng.
 - Facebook thỉnh thoảng đổi cấu trúc trang. Khi tool hỏng, làm theo mục "Khi gặp lỗi", hoặc chờ bản cập nhật mới.
 
-## Cộng đồng
-Skill này được chia sẻ miễn phí từ cộng đồng **Ads AI Lo - Quảng cáo AI lo**. Vào cộng đồng để:
+## Nhóm Zalo
+Skill này được chia sẻ miễn phí từ nhóm **Ads AI lo - Tự động hóa quảng cáo**. Vào nhóm để:
 - Hỏi đáp khi cài đặt hoặc gặp lỗi
 - Nhận thông báo khi có bản cập nhật
 - Chia sẻ kết quả soi đối thủ và cách dùng AI agent chạy quảng cáo
 
-👉 [whop.com/ads-ai-lo](https://whop.com/ads-ai-lo/)
+👉 [zalo.me/g/37yoic8thaeho75yicnb](https://zalo.me/g/37yoic8thaeho75yicnb)
 
 ## Thay đổi
 - **1.1.0 (05/11/2026)**: skill tự tìm thư mục chạy khi cài dùng chung (Codex/Claude Code); `rank.js` gộp được nhiều file từ khóa, thêm `--test-variants` và hướng dẫn xử lý ngách mới toàn ad đang test.
