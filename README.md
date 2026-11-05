@@ -52,6 +52,15 @@ Chỉ cần nói với agent bằng tiếng Việt, ví dụ:
 
 Agent sẽ tự chạy tool, đọc kết quả và trả về bảng phân tích. File dữ liệu gốc nằm trong thư mục `output/`.
 
+### Ví dụ: soi ngách sâm Hàn Quốc với Claude Code (Opus 5.5)
+Claude quét 9 từ khóa và 14 page shop sâm (853 ad), lọc ra ad chạy lâu nhất, gom các kiểu hook đang dùng và đề xuất 3 góc test, rồi trình bày thành trang báo cáo:
+
+![Ad chạy lâu nhất ngách sâm Hàn Quốc](docs/claude-sam-tong-quan.webp)
+
+![7 kiểu hook đang dùng trong ngách sâm](docs/claude-sam-hook.png)
+
+![3 góc nên test cho ngách sâm](docs/claude-sam-goc-test.png)
+
 Mẹo: ngách nào có nhiều cách gọi thì bảo agent quét vài từ khóa rồi gộp lại, ví dụ "quét cả phụ kiện VF3 và độ xe VF3 rồi xếp hạng chung". Ngách mới mà toàn ad vài ngày tuổi thì agent sẽ báo là ngách đang test thay vì gọi là ad thắng.
 
 ## Trong bộ này có gì
