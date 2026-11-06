@@ -1,6 +1,6 @@
 {
   "name": "meta-ads-library-skill",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Skill cho AI agent: soi quảng cáo đối thủ trên Meta Ad Library, xếp hạng ad thắng",
   "license": "MIT",
   "private": true,
@@ -13,7 +13,8 @@
     "pages": "node tools/ad-library/pages.js",
     "report": "node tools/ad-library/report.js",
     "download": "node tools/ad-library/download.js",
-    "lp": "node tools/ad-library/lp.js"
+    "lp": "node tools/ad-library/lp.js",
+    "find-page": "node tools/ad-library/find-page.js"
   },
   "dependencies": {
     "playwright": "1.59.1"

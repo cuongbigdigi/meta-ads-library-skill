@@ -2,7 +2,7 @@
 
 **Skill cho Claude Code và Codex: soi quảng cáo đối thủ trên Meta Ads Library, xếp hạng ad thắng, phân tích hook, offer, CTA.**
 
-Phiên bản 1.5.0, cập nhật 06/11/2026.
+Phiên bản 1.6.0, cập nhật 06/11/2026.
 
 Bộ này giúp AI agent (Claude Code, Codex) tự lấy quảng cáo đối thủ trên thư viện quảng cáo của Meta, xếp hạng ad đang ra tiền và đối thủ mạnh nhất ngách, phân tích hook, offer, format, CTA, soi landing page, tải ảnh/video ad về máy, xuất báo cáo HTML và theo dõi đối thủ mỗi ngày. Không cần đăng nhập Facebook, không cần token.
 
@@ -31,7 +31,7 @@ Bộ này giúp AI agent (Claude Code, Codex) tự lấy quảng cáo đối th�
 - **Soi ads doi thu (Claude Code)** / **Soi ads doi thu (Codex)**: bấm đúp là mở agent, gõ yêu cầu vào ô chat.
 
 Ba điều người mới hay nhầm:
-1. **Không gõ từ khóa vào cửa sổ đen của bộ cài.** Từ khóa gõ vào **ô chat của Claude Code hoặc Codex**, bằng tiếng Việt bình thường, ví dụ: "Soi đối thủ ngành nến thơm, cho anh top 10 ad thắng".
+1. **Không gõ từ khóa vào cửa sổ đen của bộ cài.** Từ khóa gõ vào **ô chat của Claude Code hoặc Codex**, bằng tiếng Việt bình thường, ví dụ: "Soi đối thủ ngành nến thơm, cho anh top 10 ad thắng". Chưa biết gõ gì thì gõ **"Bắt đầu soi ads"**, agent sẽ hỏi và dẫn từng bước.
 2. **Đang mở Claude Code / Codex lúc cài thì tắt hẳn rồi mở lại** để agent nhận skill mới.
 3. Agent **xin phép chạy lệnh** thì chọn Yes / Allow. Mỗi lần quét mất 1-3 phút.
 
@@ -72,6 +72,15 @@ Hỏi thử ngay sau khi cài: "tìm các quảng cáo phụ kiện xe VF3":
 
 ## Cách dùng
 Chỉ cần nói với agent bằng tiếng Việt. Không biết hỏi gì thì copy câu mẫu dưới đây, thay phần trong ngoặc vuông.
+
+### 3 cách bắt đầu
+Gõ **"Bắt đầu soi ads"**, agent hiện menu 3 cách và dẫn từng bước: mỗi bước báo kết quả ngắn rồi đưa lựa chọn đánh số để bạn gõ số tiếp theo. Người đã quen thì gõ thẳng yêu cầu, agent làm trọn một lượt.
+
+| Cách | Khi nào | Câu mẫu | Agent làm gì |
+|---|---|---|---|
+| 1. Khảo sát ngành hàng | Biết tên ngành, sản phẩm | "Khảo sát ngành [nến thơm]: top ad thắng, page mạnh nhất, hook và offer." | Quét 2-3 cách gọi của ngành, xếp hạng ad thắng và page mạnh nhất, phân tích hook/offer |
+| 2. Khảo sát page chính xác | Có tên page hoặc link Facebook đối thủ | "Khảo sát page [facebook.com/ten.page]: họ chạy ad nào, giữ ad nào lâu nhất, đang test gì?" | Tìm đúng Page ID từ tên/link (nhiều page trùng tên thì hỏi bạn chọn), quét cả ad đang chạy và đã tắt, lập hồ sơ quảng cáo của page |
+| 3. Chưa biết từ khóa | Chỉ mô tả được sản phẩm | "Em bán [ví da nam handmade, giá 500k, khách nam 25-40]. Đề xuất giúp em từ khóa để soi đối thủ." | Đề xuất 6-8 từ khóa theo nhóm, quét thử nhanh xem từ nào nhiều ad đúng ngách, chọn 2-3 từ tốt nhất rồi khảo sát |
 
 ### Câu lệnh mẫu theo mục tiêu
 | Muốn | Câu mẫu |
@@ -137,6 +146,7 @@ Lưu ý: máy tính phải đang bật lúc đến giờ quét. Nên theo dõi d
 | File | Dùng để |
 |---|---|
 | `tools/ad-library/scrape.js` | Mở thư viện quảng cáo, lấy dữ liệu ad |
+| `tools/ad-library/find-page.js` | Tìm Page ID từ tên page hoặc link Facebook (để soi đúng page đối thủ) |
 | `tools/ad-library/rank.js` | Xếp hạng ad thắng (chạy lâu, nhiều biến thể) |
 | `tools/ad-library/pages.js` | Xếp hạng đối thủ trong ngách (số ad, ad mới, ad sống lâu) |
 | `tools/ad-library/report.js` | Xuất báo cáo HTML có ảnh, mở bằng trình duyệt |
@@ -197,6 +207,7 @@ Skill này được chia sẻ miễn phí từ nhóm **Ads AI lo - Tự động 
 👉 [zalo.me/g/37yoic8thaeho75yicnb](https://zalo.me/g/37yoic8thaeho75yicnb)
 
 ## Thay đổi
+- **1.6.0 (06/11/2026)**: 3 cách bắt đầu dẫn từng bước: khảo sát ngành hàng, khảo sát page chính xác (tool mới `find-page.js` tìm Page ID từ tên hoặc link, nhiều page trùng tên thì hỏi chọn), chưa biết từ khóa thì AI đề xuất từ mô tả sản phẩm và quét thử chọn từ tốt nhất. Gõ "Bắt đầu soi ads" là có menu.
 - **1.5.0 (06/11/2026)**: cài xong tự mở trang hướng dẫn `huong-dan.html` (gõ ở đâu, có cần mở lại agent không, câu lệnh mẫu 5 cấp bấm Copy, mẹo chọn từ khóa, lỗi thường gặp); tạo biểu tượng Desktop mở hướng dẫn và mở Claude Code/Codex; skill biết trả lời khi khách hỏi "dùng thế nào".
 - **1.4.0 (05/11/2026)**: bộ cài 1 click cho Windows (`cai-dat.bat`): tự cài Node.js, thư viện, Chromium, quét thử, cài skill dùng chung cho Claude Code và Codex, ghi log `cai-dat.log` để gửi hỗ trợ. Mac liên hệ nhóm Zalo.
 - **1.3.0 (05/11/2026)**:

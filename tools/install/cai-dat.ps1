@@ -184,8 +184,9 @@ Write-Host '  DÙNG THẾ NÀO TIẾP THEO?' -ForegroundColor White
 Write-Host '  1. KHÔNG gõ từ khóa vào cửa sổ đen này. Cửa sổ này chỉ để cài.' -ForegroundColor White
 Write-Host '  2. Đang mở Claude Code / Codex thì TẮT HẲN rồi MỞ LẠI (để nhận skill mới).' -ForegroundColor White
 Write-Host '  3. Mở agent (biểu tượng "Soi ads doi thu" ngoài Desktop, hoặc app Claude/Codex),' -ForegroundColor White
-Write-Host '     gõ vào ô chat bằng tiếng Việt, ví dụ:' -ForegroundColor White
-Write-Host '     Soi đối thủ ngành nến thơm, cho anh top 10 ad thắng và phân tích.' -ForegroundColor Yellow
+Write-Host '     gõ vào ô chat câu này, agent sẽ dẫn bạn từng bước:' -ForegroundColor White
+Write-Host '     Bắt đầu soi ads' -ForegroundColor Yellow
+Write-Host '     (3 cách: khảo sát ngành hàng / khảo sát page theo link / chưa biết từ khóa thì AI đề xuất)' -ForegroundColor White
 Write-Host '  4. Agent xin phép chạy lệnh thì chọn Yes / Allow.' -ForegroundColor White
 Write-Host '  Đang mở trang hướng dẫn chi tiết (có câu lệnh mẫu bấm Copy)...' -ForegroundColor White
 Write-Host '  ---------------------------------------------------------' -ForegroundColor White

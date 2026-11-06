@@ -1,6 +1,6 @@
 ---
 name: meta-ads-library
-description: "Nghiên cứu quảng cáo đối thủ qua Meta Ads Library (thư viện quảng cáo Facebook): lấy ads đang chạy theo từ khóa hoặc Page ID, xếp hạng ad thắng (chạy lâu, nhiều biến thể), xếp hạng đối thủ trong ngách, phân tích hook/offer/format/CTA, soi landing page, tải creative, xuất báo cáo HTML, viết hook/kịch bản từ insight và theo dõi định kỳ. Dùng khi người dùng nói: soi đối thủ, spy ads, ads library, thư viện quảng cáo, đối thủ đang chạy ads gì, tìm ad thắng, nghiên cứu creative đối thủ, competitor ads, theo dõi đối thủ định kỳ, quét ads hằng ngày, báo khi đối thủ ra ad mới, tải ảnh video ad đối thủ, xuất báo cáo đối thủ, hướng dẫn dùng skill meta ads library, cài xong dùng thế nào, nhập từ khóa ở đâu, skill này làm được gì."
+description: "Nghiên cứu quảng cáo đối thủ qua Meta Ads Library (thư viện quảng cáo Facebook): lấy ads đang chạy theo từ khóa hoặc Page ID, xếp hạng ad thắng (chạy lâu, nhiều biến thể), xếp hạng đối thủ trong ngách, phân tích hook/offer/format/CTA, soi landing page, tải creative, xuất báo cáo HTML, viết hook/kịch bản từ insight và theo dõi định kỳ. Dùng khi người dùng nói: soi đối thủ, spy ads, ads library, thư viện quảng cáo, đối thủ đang chạy ads gì, tìm ad thắng, nghiên cứu creative đối thủ, competitor ads, theo dõi đối thủ định kỳ, quét ads hằng ngày, báo khi đối thủ ra ad mới, tải ảnh video ad đối thủ, xuất báo cáo đối thủ, hướng dẫn dùng skill meta ads library, cài xong dùng thế nào, nhập từ khóa ở đâu, skill này làm được gì, bắt đầu soi ads, khảo sát ngành hàng, khảo sát thị trường quảng cáo, khảo sát page đối thủ, soi page theo link, tìm page id, chưa biết từ khóa gì, đề xuất từ khóa theo mô tả sản phẩm."
 ---
 
 # Meta Ads Library: soi quảng cáo đối thủ
@@ -19,18 +19,70 @@ Lỗi lạ khi chạy: chạy `npm run doctor`, nó kiểm Node, thư viện, tr
 Trên Windows, cài mãi không được (Node, npm, Chromium): bảo người dùng bấm đúp `cai-dat.bat` ở thư mục gốc, bộ cài tự xử lý và ghi `cai-dat.log`. Người dùng Mac cần hỗ trợ cài: hướng dẫn liên hệ nhóm Zalo https://zalo.me/g/37yoic8thaeho75yicnb.
 Kết quả nằm trong `output/` của thư mục gốc đó, không phải thư mục dự án người dùng đang mở.
 
-## Người dùng mới hỏi "dùng thế nào", "nhập từ khóa ở đâu", "làm được gì"
-Trả lời ngắn, không chạy tool:
-1. Họ đang ở đúng chỗ: cứ gõ yêu cầu bằng tiếng Việt vào ô chat này, không cần lệnh hay cú pháp. Từ khóa nằm luôn trong câu, ví dụ "Soi đối thủ ngành nến thơm".
-2. Đưa 5 câu thử (mỗi câu 1 dòng, để họ copy):
-   - Soi đối thủ ngành [nến thơm], cho anh top 10 ad thắng và phân tích hook, offer.
-   - Ngách [máy lọc nước] có những page nào chạy ads mạnh nhất?
-   - Tải ảnh và video của top 10 ad về máy.
-   - Xuất báo cáo HTML có ảnh cho ngách [hồng sâm].
-   - Theo dõi ngách [nến thơm] và 5 đối thủ mạnh nhất, quét mỗi sáng 8h.
-3. Nhắc: khi được hỏi quyền chạy lệnh thì chọn cho phép; mỗi lần quét mất 1-3 phút.
-4. Hướng dẫn đầy đủ có câu lệnh mẫu bấm Copy: file `huong-dan.html` ở thư mục gốc (Windows: biểu tượng "Huong dan Meta Ads Library" ngoài Desktop). Mở file đó cho họ nếu được.
-Rồi hỏi họ muốn soi ngành nào để làm luôn.
+## Người dùng mới hỏi "dùng thế nào", "nhập từ khóa ở đâu", "làm được gì", hoặc chỉ gõ "bắt đầu"
+Không chạy tool. Nói ngắn: họ đang ở đúng chỗ, cứ gõ tiếng Việt vào ô chat này, không cần lệnh hay cú pháp. Rồi đưa **menu 3 cách bắt đầu** ở mục dưới và hỏi họ chọn số mấy.
+Nhắc thêm 1 dòng: khi agent hỏi quyền chạy lệnh thì chọn cho phép, mỗi lần quét mất 1-3 phút. Hướng dẫn có câu lệnh mẫu bấm Copy nằm ở `huong-dan.html` (Windows: biểu tượng "Huong dan Meta Ads Library" ngoài Desktop).
+
+## Chọn cách bắt đầu (3 chế độ)
+**Đọc yêu cầu trước khi hỏi:**
+- Đã có từ khóa ngành rõ ràng ("soi ngách nến thơm") → vào thẳng **Chế độ 1**, không hiện menu.
+- Đã có tên page hoặc link facebook.com/... → vào thẳng **Chế độ 2**.
+- Chỉ mô tả sản phẩm, hoặc nói "chưa biết từ khóa", "không biết gõ gì" → **Chế độ 3**.
+- Yêu cầu mơ hồ ("soi ads giúp em", "bắt đầu") → hiện menu này, chờ họ chọn:
+
+> Bạn muốn bắt đầu theo cách nào? Gõ số:
+> **1. Khảo sát ngành hàng**: bạn biết tên ngành/sản phẩm (ví dụ "nến thơm"). Mình tìm ad thắng, page mạnh nhất, hook và offer của cả ngành.
+> **2. Khảo sát page chính xác**: bạn có tên page hoặc link Facebook của đối thủ. Mình soi toàn bộ quảng cáo của đúng page đó.
+> **3. Chưa biết từ khóa**: bạn mô tả sản phẩm của mình, mình đề xuất từ khóa, quét thử xem từ nào nhiều ad đúng ngách rồi mới khảo sát.
+
+**Cách dẫn từng bước (áp dụng cho cả 3 chế độ):**
+- Mỗi bước nói 1 câu đang làm gì, trước khi chạy lệnh lâu báo "mất khoảng 1-2 phút".
+- Xong mỗi bước: tóm tắt kết quả ngắn (vài con số chính + 3-5 ý), rồi đưa **"Bước tiếp theo"** là danh sách đánh số 2-4 lựa chọn để người dùng chỉ cần gõ số. Không đổ hết mọi thứ trong một lần.
+- Người dùng rành (gõ sẵn từ khóa, tham số, yêu cầu cụ thể) thì làm luôn trọn quy trình, không hỏi từng bước.
+- Gặp chỗ phải đoán (nhiều page trùng tên, từ khóa ra quá ít ad) thì hỏi, không tự chọn bừa.
+
+### Chế độ 1. Khảo sát ngành hàng
+1. Chốt từ khóa: lấy từ khóa người dùng đưa, tự thêm 1-2 cách gọi khác người bán hay viết trong ad. Báo danh sách sẽ quét (không cần chờ xác nhận trừ khi từ khóa mơ hồ).
+2. Quét mỗi từ khóa (`scrape.js --q`, mục 1 Quy trình), rồi `rank.js` và `pages.js` gộp các file với `--match`.
+3. Trả kết quả: số ad / số page, top 5 ad thắng (bảng mục 3), top 5 page mạnh nhất, 3 pattern chính.
+4. Bước tiếp theo gợi ý: (1) Soi kỹ page mạnh nhất (sang Chế độ 2 với page_id có sẵn), (2) Soi landing page, (3) Xuất báo cáo HTML, (4) Viết hook/kịch bản cho sản phẩm của bạn (hỏi thông tin bước 0).
+
+### Chế độ 2. Khảo sát page chính xác
+1. Tìm Page ID từ tên hoặc link (nhiều page cùng lúc được):
+   ```bash
+   node tools/ad-library/find-page.js "Tên page" https://www.facebook.com/ten.page
+   ```
+   - Có dòng `KHỚP:` → dùng page_id đó.
+   - Không có `KHỚP` mà ra danh sách → đưa người dùng bảng đánh số (tên, link facebook.com/..., lượt thích, ngành) và hỏi chọn số mấy. Không tự chọn dù page đầu có nhiều lượt thích nhất.
+   - Không ra gì → xin link facebook.com/... của page (mở page trên Facebook, copy thanh địa chỉ), hoặc thử tên không dấu.
+   - Đã có page_id trong file kết quả quét từ khóa thì dùng luôn, khỏi tìm.
+2. Quét toàn bộ ad của page, kể cả ad đã tắt:
+   ```bash
+   node tools/ad-library/scrape.js --page-id <page_id> --status all --max 150
+   node tools/ad-library/rank.js output/page-<page_id>-VN-<ngày>.json --top 15 --min-days 1
+   ```
+   (Tên file đúng nằm ở dòng `OK ... ads -> ...` mà scrape.js in ra.)
+3. Trả "hồ sơ quảng cáo" của page:
+   - Số ad đang chạy / đã tắt, ad sống lâu nhất (ngày), số ad mới trong 7 và 30 ngày qua (đọc `start_date`) = nhịp ra ad.
+   - Ad họ giữ lâu nhất (ad thắng của họ) và nhóm ad vài ngày đã tắt (góc họ test rồi bỏ).
+   - Format, CTA chính, chạy tin nhắn hay website, offer/giá lặp lại.
+   - Nhiều page: thêm bảng so sánh các page cạnh nhau theo các tiêu chí trên.
+4. Bước tiếp theo gợi ý: (1) Soi landing page của page này, (2) Tải ảnh/video ad thắng của họ, (3) Theo dõi page này mỗi ngày (mục 5), (4) So với cả ngành (Chế độ 1).
+
+### Chế độ 3. Chưa biết từ khóa: đề xuất từ mô tả
+1. Nếu người dùng chưa mô tả, hỏi gộp 1 lần: bán sản phẩm gì, cho ai, giá khoảng bao nhiêu, đối thủ biết tên ai không (không bắt buộc).
+2. Đề xuất 6-8 từ khóa, chia nhóm, giải thích ngắn vì sao:
+   - Tên sản phẩm phổ biến (cách khách gọi, không phải tên khoa học): "nến thơm", "nến thơm phòng ngủ".
+   - Công dụng / nỗi đau: "khử mùi phòng", "mất ngủ".
+   - Đối tượng / dịp: "quà tặng bạn gái", "quà tân gia".
+   - Từ người bán hay viết trong ad: "handmade", "tinh dầu thiên nhiên".
+   Từ khóa 2-4 chữ là vừa: 1 chữ quá rộng (lẫn ngành khác), quá dài thì ra ít ad.
+3. Quét thử nhanh 4-5 từ khóa tiềm năng nhất, mỗi từ `--max 20` (khoảng 30-40 giây mỗi từ):
+   ```bash
+   node tools/ad-library/scrape.js --q "từ khóa" --max 20 --out output/thu-<từ-khóa>.json
+   ```
+   Đọc từng file, lập bảng: từ khóa | số ad | bao nhiêu ad đúng ngách (đọc `body`, `page_name`) | page tiêu biểu. Từ nào gần 0 ad hoặc lạc đề nhiều thì loại.
+4. Chọn 2-3 từ khóa tốt nhất, hỏi người dùng "khảo sát kỹ với các từ này nhé?" rồi sang **Chế độ 1** (quét lại `--max 60`). Nếu người dùng có tên đối thủ, chạy thêm Chế độ 2 cho các page đó.
 
 ## Bước 0. Hỏi nhanh trước khi làm
 - **Chỉ muốn xem thị trường** ("đối thủ đang chạy gì", "soi ngách X"): làm luôn, không hỏi.
@@ -47,7 +99,7 @@ Rồi hỏi họ muốn soi ngành nào để làm luôn.
 ```bash
 # Theo từ khóa ngành/sản phẩm
 node tools/ad-library/scrape.js --q "kem chống nắng" --max 60
-# Theo Page đối thủ (page_id có trong kết quả tìm từ khóa)
+# Theo Page đối thủ (page_id có trong kết quả quét từ khóa, hoặc tìm bằng find-page.js từ tên/link page)
 node tools/ad-library/scrape.js --page-id 123456789 --status all --max 100
 ```
 Tham số:
