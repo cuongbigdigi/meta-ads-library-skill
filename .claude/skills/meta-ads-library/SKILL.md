@@ -56,6 +56,8 @@ Nhắc thêm 1 dòng: khi agent hỏi quyền chạy lệnh thì chọn cho phé
    - Không có `KHỚP` mà ra danh sách → đưa người dùng bảng đánh số (tên, link facebook.com/..., lượt thích, ngành) và hỏi chọn số mấy. Không tự chọn dù page đầu có nhiều lượt thích nhất.
    - Không ra gì → xin link facebook.com/... của page (mở page trên Facebook, copy thanh địa chỉ), hoặc thử tên không dấu.
    - Đã có page_id trong file kết quả quét từ khóa thì dùng luôn, khỏi tìm.
+   - Không tự lấy số trong link `profile.php?id=100...` làm page_id: page kiểu mới có mã hồ sơ khác mã page của thư viện quảng cáo. Luôn đưa link qua `find-page.js`, tool tự mở trang Facebook lấy đúng mã.
+   - Sau khi quét, kiểm `page_name` trong file kết quả đúng page người dùng muốn rồi mới phân tích.
 2. Quét toàn bộ ad của page, kể cả ad đã tắt:
    ```bash
    node tools/ad-library/scrape.js --page-id <page_id> --status all --max 150

@@ -61,44 +61,84 @@ const norm = (s) => (s || '').toLowerCase().normalize('NFD').replace(/\p{M}/gu, 
   const box = page.locator('input[type=search]:visible').last();
   await box.waitFor({ timeout: 30000 });
 
-  const results = [];
-  for (const raw of args) {
-    const inp = parseInput(raw);
-    if (inp.id) { results.push({ input: raw, matched: { page_id: inp.id, name: '(lấy từ link)', exact: true }, candidates: [] }); continue; }
-    const text = inp.alias || inp.name;
+  // Gõ chữ vào ô tìm kiếm của thư viện, trả danh sách page gợi ý
+  async function typeahead(text) {
     responses.length = 0;
     await box.click();
     await box.fill('');
     await box.fill(text);
     await page.keyboard.press('End');
-    // chờ gợi ý cho đúng chữ vừa nhập
     let got = null;
     for (let i = 0; i < 20 && !got; i++) {
       await page.waitForTimeout(500);
       got = [...responses].reverse().find(r => r.pages.length && (r.query.includes(text) || norm(r.query) === norm(text))) || null;
     }
     if (!got) got = responses.filter(r => r.pages.length).pop() || { pages: [] };
-    const cands = got.pages.map(p => ({
+    return got.pages.map(p => ({
       page_id: String(p.page_id), name: p.name, alias: p.page_alias || null, likes: p.likes || 0,
       category: p.category || null, verified: p.verification && p.verification !== 'NOT_VERIFIED',
       ig: p.ig_username || null, ig_followers: p.ig_followers || null,
       fb_url: 'https://www.facebook.com/' + (p.page_alias || p.page_id),
       ads_library_url: `https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=${country}&view_all_page_id=${p.page_id}`,
     }));
-    // Khớp chắc chắn: alias trùng link, hoặc tên trùng hẳn (bỏ dấu, bỏ khoảng trắng)
-    // Gõ tên tay: chỉ coi là khớp khi đúng 1 page trùng hẳn tên, còn lại để người dùng chọn
-    const sameName = cands.filter(c => norm(c.name) === norm(text));
-    const exact = inp.alias
-      ? cands.find(c => c.alias && c.alias.toLowerCase() === inp.alias.toLowerCase())
-      : (sameName.length === 1 ? sameName[0] : null);
-    results.push({ input: raw, matched: exact ? { ...exact, exact: true } : null, candidates: cands.slice(0, top) });
+  }
+
+  // Mở trang Facebook (không đăng nhập) để lấy mã page thư viện quảng cáo dùng.
+  // Page kiểu mới có 2 mã: mã hồ sơ (100...) hiện trên link/profile.php và mã page (associated_page_id) mà thư viện dùng.
+  async function fromFacebook(url) {
+    const t = await ctx.newPage();
+    try {
+      await t.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
+      await t.waitForTimeout(3000);
+      const html = await t.content();
+      const pick = (re) => (html.match(re) || [])[1] || null;
+      const title = ((await t.title()) || '').split(' | ')[0].trim();
+      return {
+        page_id: pick(/"associated_page_id":"(\d+)"/) || pick(/"pageID":"(\d+)"/) || pick(/"delegate_page_id":"(\d+)"/),
+        profile_id: pick(/"userID":"(\d+)"/) || pick(/fb:\/\/(?:profile|page)\/\??(?:id=)?(\d+)/),
+        alias: (new URL(t.url()).pathname.split('/').filter(Boolean)[0] || '').replace(/^profile\.php$/, '') || null,
+        name: /^(facebook|log in|đăng nhập)/i.test(title) ? null : title,
+      };
+    } catch { return {}; } finally { await t.close(); }
+  }
+
+  const results = [];
+  for (const raw of args) {
+    const inp = parseInput(raw);
+    const fbUrl = inp.id ? 'https://www.facebook.com/profile.php?id=' + inp.id : inp.alias ? 'https://www.facebook.com/' + encodeURIComponent(inp.alias) : null;
+    if (!fbUrl) {
+      // Gõ tên tay: chỉ coi là khớp khi đúng 1 page trùng hẳn tên (bỏ dấu, bỏ khoảng trắng), còn lại để người dùng chọn
+      const cands = await typeahead(inp.name);
+      const sameName = cands.filter(c => norm(c.name) === norm(inp.name));
+      results.push({ input: raw, matched: sameName.length === 1 ? { ...sameName[0], exact: true } : null, candidates: cands.slice(0, top) });
+      continue;
+    }
+    // Có link/alias/số ID: tra alias trước, không ra thì mở trang Facebook lấy mã page và tên page rồi tra lại
+    let cands = inp.alias ? await typeahead(inp.alias) : [];
+    let exact = cands.find(c => c.alias && c.alias.toLowerCase() === inp.alias.toLowerCase());
+    let fb = null;
+    if (!exact) {
+      fb = await fromFacebook(fbUrl);
+      const ids = [fb.page_id, fb.profile_id, inp.id].filter(Boolean);
+      const alias = inp.alias || fb.alias;
+      if (fb.name) {
+        const more = await typeahead(fb.name);
+        cands = [...more, ...cands.filter(c => !more.some(m => m.page_id === c.page_id))];
+      }
+      exact = cands.find(c => ids.includes(c.page_id)) || cands.find(c => alias && c.alias && c.alias.toLowerCase() === alias.toLowerCase());
+      if (!exact && fb.page_id) exact = { page_id: fb.page_id, name: fb.name || '(tên chưa rõ)', alias, source: 'trang Facebook',
+        ads_library_url: `https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=${country}&view_all_page_id=${fb.page_id}` };
+    }
+    results.push({ input: raw, matched: exact ? { ...exact, exact: true } : null, facebook: fb, candidates: cands.slice(0, top) });
   }
   await browser.close();
 
   for (const r of results) {
     console.log(`\n=== ${r.input}`);
-    if (r.matched) console.log(`KHỚP: ${r.matched.name} | page_id ${r.matched.page_id}${r.matched.alias ? ' | facebook.com/' + r.matched.alias : ''}`);
+    if (r.matched) console.log(`KHỚP: ${r.matched.name} | page_id ${r.matched.page_id}${r.matched.alias ? ' | facebook.com/' + r.matched.alias : ''}
+  Thư viện quảng cáo: ${r.matched.ads_library_url}`);
     else console.log(r.candidates.length ? 'Chưa chắc page nào đúng, chọn trong danh sách gợi ý:' : 'Không tìm thấy page nào. Thử tên khác, tên không dấu, hoặc dán link facebook.com/... của page.');
+    if (r.matched) continue;
     r.candidates.forEach((c, i) => console.log(`  ${i + 1}. ${c.name} | page_id ${c.page_id} | ${c.alias ? 'facebook.com/' + c.alias : '-'} | ${c.likes.toLocaleString('vi-VN')} thích${c.verified ? ' | tích xanh' : ''}${c.category ? ' | ' + c.category : ''}`));
   }
   const dir = path.join(__dirname, '..', '..', 'output');
