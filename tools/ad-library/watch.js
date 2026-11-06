@@ -93,7 +93,7 @@ state.last_run = stamp;
 fs.writeFileSync(stateFile, JSON.stringify(state, null, 2));
 
 const head = firstRun
-  ? `Lần quét đầu tiên: đã lưu mốc cho ${targets.length} mục. Từ lần sau sẽ báo ad mới, ad sống qua mốc ngày và ad đối thủ đã tắt.`
+  ? `Lần quét đầu tiên: đã lưu mốc cho ${targets.length} mục. Từ lần sau sẽ báo ad mới, ad sống qua mốc ngày và ad đối thủ đã tắt (có ở lần trước, lần này biến mất).`
   : `${summary.new} ad mới, ${summary.milestone} ad vừa qua mốc ngày, ${summary.stopped} ad đã tắt${summary.failed ? `, ${summary.failed} mục quét lỗi` : ''}.`;
 const report = `# Theo dõi Ads Library ${stamp}\n\n${head}\n\n${sections.join('\n')}`;
 const reportFile = path.join(dir, `report-${stamp}.md`);

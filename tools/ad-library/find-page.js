@@ -158,5 +158,5 @@ if (require.main === module) (async () => {
   const file = path.join(dir, `find-page-${slug(args[0]).slice(0, 40)}-${new Date().toISOString().slice(0, 10)}.json`);
   fs.writeFileSync(file, JSON.stringify(results, null, 2));
   console.log(`\nĐã lưu ${file}`);
-  console.log('Bước tiếp: node tools/ad-library/scrape.js --page-id <page_id hoặc link page> --status all --max 100');
+  console.log('Bước tiếp: node tools/ad-library/scrape.js --page-id <page_id hoặc link page> --max 100');
 })().catch(e => { console.error('LỖI:', e.message); process.exit(1); });

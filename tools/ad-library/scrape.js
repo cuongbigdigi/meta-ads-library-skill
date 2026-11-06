@@ -6,10 +6,10 @@
  *
  * Dùng:
  *   node tools/ad-library/scrape.js --q "kem chống nắng" --max 60
- *   node tools/ad-library/scrape.js --page-id 123456789 --status all --max 100
- *   node tools/ad-library/scrape.js --page https://www.facebook.com/ten.page --status all   (dán link, tự lấy UID)
+ *   node tools/ad-library/scrape.js --page-id 123456789 --max 100
+ *   node tools/ad-library/scrape.js --page https://www.facebook.com/ten.page   (dán link, tự lấy UID)
  * Tham số:
- *   --country VN (mặc định) | --status active|inactive|all (mặc định active)
+ *   --country VN (mặc định) | --status active (mặc định; quảng cáo thương mại ở VN chỉ hiện ad đang chạy, inactive/all không ra thêm)
  *   --media all|image|video | --out file.json | --headed (hiện trình duyệt để xem)
  *   --sort top|new (mặc định top: ad nhiều hiển thị/chạy lâu trước; new: ad mới nhất trước)
  *   --loose (khớp lỏng từng chữ thay vì đúng cụm từ: ra nhiều ad hơn nhưng lẫn nhiều ad lạc đề)

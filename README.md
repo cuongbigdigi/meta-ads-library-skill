@@ -2,7 +2,7 @@
 
 **Skill cho Claude Code và Codex: soi quảng cáo đối thủ trên Meta Ads Library, xếp hạng ad thắng, phân tích hook, offer, CTA.**
 
-Phiên bản 1.6.1, cập nhật 06/11/2026.
+Phiên bản 1.6.2, cập nhật 06/11/2026.
 
 Bộ này giúp AI agent (Claude Code, Codex) tự lấy quảng cáo đối thủ trên thư viện quảng cáo của Meta, xếp hạng ad đang ra tiền và đối thủ mạnh nhất ngách, phân tích hook, offer, format, CTA, soi landing page, tải ảnh/video ad về máy, xuất báo cáo HTML và theo dõi đối thủ mỗi ngày. Không cần đăng nhập Facebook, không cần token.
 
@@ -89,7 +89,7 @@ Gõ **"Bắt đầu soi ads"**, agent hiện menu 3 cách và dẫn từng bư�
 |---|---|
 | Tìm ad đang ra tiền | "Soi ngách [nến thơm], cho anh top 10 ad chạy lâu nhất và phân tích hook, offer." |
 | Biết đối thủ là ai | "Ngách [máy lọc nước] có những page nào chạy ads mạnh nhất? Xếp hạng giúp em." |
-| Soi kỹ 1 đối thủ | "Quét toàn bộ quảng cáo của page [dán link page Facebook], kể cả ad đã tắt. Họ test gì, giữ gì?" |
+| Soi kỹ 1 đối thủ | "Quét toàn bộ quảng cáo đang chạy của page [dán link page Facebook]. Họ test gì, giữ ad nào lâu nhất?" |
 | Lấy UID page | "Lấy UID của các page này: [dán 1 hay nhiều link page]" |
 | Lấy ý tưởng hook | "Gom các kiểu hook đang dùng trong ngách [mỹ phẩm thuần chay], mỗi kiểu 2 ví dụ." |
 | So giá, so offer | "So sánh giá, combo, quà tặng của 5 đối thủ đứng đầu ngách [đồ ăn vặt], soi cả landing page." |
@@ -135,7 +135,7 @@ Muốn máy tự quét mỗi sáng và báo khi đối thủ ra ad mới? Nói v
 Agent sẽ tạo file `watchlist.json` (danh sách từ khóa + page đối thủ), chạy thử rồi hẹn giờ trên máy (Task Scheduler với Windows, cron với Mac). Mỗi lần quét, tool so với lần trước và báo:
 - **Ad mới** đối thủ vừa lên.
 - **Ad vừa sống qua mốc 7/14/30 ngày**: ứng viên ad thắng, nên xem kỹ.
-- **Ad đối thủ đã tắt**: thường là ad không hiệu quả.
+- **Ad đối thủ đã tắt**: thư viện không cho xem ad đã tắt, nên tool so với lần quét trước: ad lần trước còn chạy mà lần này biến mất là đã tắt, thường là ad không hiệu quả.
 
 - **Xu hướng số ad** của từng đối thủ qua các lần quét: tăng mạnh nghĩa là họ đang đẩy ngân sách.
 
@@ -196,6 +196,7 @@ Hoặc mô tả lỗi cho agent và nhờ nó sửa. Một số câu mẫu:
 Nhờ agent mà vẫn chưa xong? Hỏi trực tiếp trong [nhóm Zalo Ads AI lo](https://zalo.me/g/37yoic8thaeho75yicnb).
 
 ## Lưu ý
+- **Chỉ xem được ad đang chạy.** Với quảng cáo thương mại ở VN, thư viện không hiện ad đã tắt. Muốn biết đối thủ tắt ad nào: bật theo dõi định kỳ, tool so các lần quét với nhau.
 - Thư viện quảng cáo **không cho biết chi tiêu hay doanh thu**. "Chạy lâu, nhiều biến thể" chỉ là tín hiệu gián tiếp cho thấy ad đang hiệu quả.
 - **Không sao chép nguyên văn** quảng cáo của người khác. Hãy lấy cấu trúc và góc tiếp cận, rồi viết lại theo sản phẩm của bạn.
 - Đây là công cụ nghiên cứu. Việc tự động lấy dữ liệu có thể không phù hợp với điều khoản sử dụng của Meta. Hãy dùng vừa phải, không chạy dồn dập. Người dùng tự chịu trách nhiệm khi sử dụng.
@@ -210,6 +211,7 @@ Skill này được chia sẻ miễn phí từ nhóm **Ads AI lo - Tự động 
 👉 [zalo.me/g/37yoic8thaeho75yicnb](https://zalo.me/g/37yoic8thaeho75yicnb)
 
 ## Thay đổi
+- **1.6.2 (06/11/2026)**: sửa tài liệu: thư viện quảng cáo không cho xem ad đã tắt (quảng cáo thương mại ở VN chỉ hiện ad đang chạy), bỏ các chỗ ghi "kể cả ad đã tắt". Biết đối thủ tắt ad nào thì dùng theo dõi định kỳ (so với lần quét trước).
 - **1.6.1 (06/11/2026)**: soi page chỉ cần dán link, không cần UID: `scrape.js --page <link>` tự lấy UID rồi quét; danh sách theo dõi nhận `"url"` của page; lấy đúng UID cả với page kiểu mới (link `profile.php?id=` có mã hồ sơ khác mã page); nhờ skill "lấy UID page" là có UID + link thư viện quảng cáo.
 - **1.6.0 (06/11/2026)**: 3 cách bắt đầu dẫn từng bước: khảo sát ngành hàng, khảo sát page chính xác (tool mới `find-page.js` tìm Page ID từ tên hoặc link, nhiều page trùng tên thì hỏi chọn), chưa biết từ khóa thì AI đề xuất từ mô tả sản phẩm và quét thử chọn từ tốt nhất. Gõ "Bắt đầu soi ads" là có menu.
 - **1.5.0 (06/11/2026)**: cài xong tự mở trang hướng dẫn `huong-dan.html` (gõ ở đâu, có cần mở lại agent không, câu lệnh mẫu 5 cấp bấm Copy, mẹo chọn từ khóa, lỗi thường gặp); tạo biểu tượng Desktop mở hướng dẫn và mở Claude Code/Codex; skill biết trả lời khi khách hỏi "dùng thế nào".

@@ -34,7 +34,7 @@ const testing = list.filter(a => (a.days_running || 0) < minDays && (a.variants 
 console.log(`Đã đọc ${files.length} file, ${all.length} ad, ${ads.length} ad sau lọc, ${list.length} creative khác nhau.
 `);
 console.log(`# Top ad (điểm = ngày chạy + 2×biến thể, từ ${minDays} ngày trở lên)\n`);
-if (!ranked.length) console.log('(Chưa có ad nào đủ ngày chạy, ngách đang test nhiều. Xem mục "Đang test" bên dưới, hoặc thử --min-days 3 / --status all.)');
+if (!ranked.length) console.log('(Chưa có ad nào đủ ngày chạy, ngách đang test nhiều. Xem mục "Đang test" bên dưới, hoặc thử --min-days 3.)');
 ranked.forEach((a, i) => {
   console.log(`${i + 1}. [${a.page_name}] ${a.format} | ${a.days_running}d | ${a.variants} biến thể | CTA: ${a.cta || '-'}`);
   console.log(`   Hook: ${(a.body || '').replace(/\s+/g, ' ').slice(0, 160)}`);

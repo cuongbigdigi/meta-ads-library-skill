@@ -49,9 +49,9 @@ Nhắc thêm 1 dòng: khi agent hỏi quyền chạy lệnh thì chọn cho phé
 
 ### Chế độ 2. Khảo sát page chính xác
 Người dùng **chỉ cần dán link page** (facebook.com/ten.page, facebook.com/profile.php?id=..., link thư viện quảng cáo) hoặc gõ tên page. Không bao giờ bắt họ tự đi tìm UID/Page ID: tool tự đổi link ra đúng UID.
-1. Quét thẳng bằng link, tool tự lấy UID rồi quét toàn bộ ad kể cả ad đã tắt:
+1. Quét thẳng bằng link, tool tự lấy UID rồi quét toàn bộ ad đang chạy của page:
    ```bash
-   node tools/ad-library/scrape.js --page https://www.facebook.com/ten.page --status all --max 150
+   node tools/ad-library/scrape.js --page https://www.facebook.com/ten.page --max 150
    ```
    - Dòng `Page: <tên> | UID <số>` cho biết đã lấy đúng page nào. Báo tên page đó cho người dùng.
    - Gõ tên page mà nhiều page trùng tên: lệnh dừng và in danh sách page gần giống. Đưa người dùng bảng đánh số (tên, link facebook.com/..., lượt thích, ngành) và hỏi chọn số mấy, rồi chạy lại với `--page-id <page_id đã chọn>`. Không tự chọn dù page đầu nhiều lượt thích nhất.
@@ -67,8 +67,8 @@ Người dùng **chỉ cần dán link page** (facebook.com/ten.page, facebook.c
    node tools/ad-library/rank.js output/page-<page_id>-VN-<ngày>.json --top 15 --min-days 1
    ```
 3. Trả "hồ sơ quảng cáo" của page:
-   - Số ad đang chạy / đã tắt, ad sống lâu nhất (ngày), số ad mới trong 7 và 30 ngày qua (đọc `start_date`) = nhịp ra ad.
-   - Ad họ giữ lâu nhất (ad thắng của họ) và nhóm ad vài ngày đã tắt (góc họ test rồi bỏ).
+   - Số ad đang chạy, ad sống lâu nhất (ngày), số ad mới trong 7 và 30 ngày qua (đọc `start_date`) = nhịp ra ad.
+   - Ad họ giữ lâu nhất (ad thắng của họ) và nhóm ad mới vài ngày, nhiều bản gần giống nhau (góc họ đang test).
    - Format, CTA chính, chạy tin nhắn hay website, offer/giá lặp lại.
    - Nhiều page: thêm bảng so sánh các page cạnh nhau theo các tiêu chí trên.
 4. Bước tiếp theo gợi ý: (1) Soi landing page của page này, (2) Tải ảnh/video ad thắng của họ, (3) Theo dõi page này mỗi ngày (mục 5), (4) So với cả ngành (Chế độ 1).
@@ -104,13 +104,13 @@ Người dùng **chỉ cần dán link page** (facebook.com/ten.page, facebook.c
 # Theo từ khóa ngành/sản phẩm
 node tools/ad-library/scrape.js --q "kem chống nắng" --max 60
 # Theo Page đối thủ: dán link page (tự lấy UID), hoặc page_id có sẵn
-node tools/ad-library/scrape.js --page https://www.facebook.com/ten.page --status all --max 100
-node tools/ad-library/scrape.js --page-id 123456789 --status all --max 100
+node tools/ad-library/scrape.js --page https://www.facebook.com/ten.page --max 100
+node tools/ad-library/scrape.js --page-id 123456789 --max 100
 ```
 Tham số:
 - `--sort top` (mặc định): ad nhiều lượt hiển thị trước, là nơi có ad chạy lâu, ad thắng. `--sort new`: ad mới lên trước, dùng khi muốn xem đối thủ vừa tung gì.
 - Từ khóa mặc định **khớp đúng cụm từ**. `--loose` khớp lỏng từng chữ: ra nhiều ad hơn nhưng lẫn rất nhiều ad lạc đề, chỉ dùng khi cụm từ ra quá ít.
-- `--country VN` (mặc định), `--status active|inactive|all`, `--media all|image|video`, `--out file.json`, `--headed` (hiện trình duyệt để kiểm tra).
+- `--country VN` (mặc định), `--status active` (mặc định; quảng cáo thương mại ở VN thư viện chỉ hiện ad đang chạy, `inactive|all` không ra thêm ad đã tắt), `--media all|image|video`, `--out file.json`, `--headed` (hiện trình duyệt để kiểm tra).
 
 Kết quả lưu ở `output/<từ-khóa>-<country>-<ngày>.json`. Mất khoảng 30-90 giây.
 Một từ khóa thường bỏ sót đối thủ. Nên quét 2-3 cách gọi khác nhau của cùng ngách (ví dụ "phụ kiện vf3", "độ xe vf3"), rồi gộp ở các bước sau (mọi tool đều nhận nhiều file).
@@ -125,7 +125,7 @@ node tools/ad-library/pages.js output/<file1>.json output/<file2>.json --top 10 
   - Mục "Đang test": ad chưa đủ ngày nhưng có từ 3 biến thể (`--test-variants N`), tức đối thủ đang thử nghiệm.
 - `pages.js`: xếp page theo số ad, số ad mới 7 ngày (đang đẩy mạnh), ad sống lâu nhất, format/CTA chính, website. `--watchlist` in sẵn đoạn JSON để đưa vào theo dõi.
 - `--match`: chỉ giữ ad có tên page/tiêu đề/nội dung khớp. **Luôn truyền** các từ liên quan đến ngành.
-- **Ngách mới, toàn ad vài ngày tuổi** (top ad trống): không kết luận "ad thắng". Báo người dùng đây là ngách đang test, phân tích từ mục "Đang test" và các page chạy nhiều ad gần giống nhau. Có thể thử `--min-days 3` hoặc quét lại với `--status all`.
+- **Ngách mới, toàn ad vài ngày tuổi** (top ad trống): không kết luận "ad thắng". Báo người dùng đây là ngách đang test, phân tích từ mục "Đang test" và các page chạy nhiều ad gần giống nhau. Có thể thử `--min-days 3`.
 
 ### 3. Phân tích (agent tự làm, đọc file JSON)
 Với các ad top đầu, trình bày bảng:
@@ -188,6 +188,7 @@ Lưu ý khi theo dõi: máy phải bật lúc đến giờ; mỗi mục nghỉ 1
 Gợi ý 2-3 bước tiếp theo phù hợp, ví dụ: "Muốn em xuất báo cáo HTML có ảnh?", "Tải ảnh/video top 10 ad về máy?", "Soi landing page của các ad chạy web?", "Viết 10 hook cho sản phẩm của anh/chị?", "Theo dõi các page này mỗi sáng?". Người mới thường không biết tool làm được gì thêm.
 
 ## Lưu ý
+- **Không xem được ad đã tắt**: với quảng cáo thương mại ở VN, thư viện chỉ hiện ad đang chạy. Không hứa với người dùng "xem cả ad đã tắt". Muốn biết đối thủ tắt ad nào thì bật theo dõi định kỳ (mục 5): ad có ở lần quét trước mà lần này biến mất = đã tắt.
 - **Không có số chi tiêu**: thư viện không cho biết chi tiêu hay doanh thu của quảng cáo thương mại. "Chạy lâu" chỉ là tín hiệu gián tiếp, phải nói rõ điều này với người dùng.
 - **Ít ad hơn `--max`**: cụm từ quá hẹp. Thử cách gọi khác, `--loose`, hoặc quét theo `--page-id`.
 - **Kết quả lẫn ad không liên quan**: dùng `--match` hoặc lọc tay theo `page_name`/`body`.
