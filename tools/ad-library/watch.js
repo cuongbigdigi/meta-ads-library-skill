@@ -40,7 +40,7 @@ const targets = [
   ...(cfg.keywords || []).map(k => typeof k === 'string' ? { q: k } : k).map(k => ({
     key: 'kw:' + slug(k.q), label: `Từ khóa "${k.q}"`, args: ['--q', k.q, '--max', String(k.max || maxKw), '--sort', k.sort || 'new'], match: k.match, isPage: false })),
   ...(cfg.pages || []).map(p => typeof p === 'string' ? { id: p } : p).map(p => ({
-    key: 'page:' + p.id, label: `Page ${p.name || p.id}`, args: ['--page-id', String(p.id), '--max', String(p.max || maxPage)], isPage: true })),
+    key: 'page:' + (p.id || p.url), label: `Page ${p.name || p.id || p.url}`, args: ['--page-id', String(p.id || p.url), '--max', String(p.max || maxPage)], isPage: true })),
 ];
 if (!targets.length) { console.error('watchlist trống: thêm "keywords" hoặc "pages".'); process.exit(1); }
 if (argv.includes('--dry-run')) { targets.forEach(t => console.log(t.label, t.args.join(' '))); process.exit(0); }
@@ -53,7 +53,7 @@ const sections = [];
 const summary = { new: 0, milestone: 0, stopped: 0, failed: 0 };
 targets.forEach((t, i) => {
   if (i) sleep(15000 + Math.random() * 15000); // nghỉ giữa các lượt để không bị chặn
-  const out = path.join(dir, 'raw', `${t.key.replace(':', '-')}-${stamp}.json`);
+  const out = path.join(dir, 'raw', `${t.key.replace(/https?:\/\/(www\.)?/, '').replace(/[^\p{L}\p{N}._-]+/gu, '-').slice(0, 80)}-${stamp}.json`);
   console.error(`[${i + 1}/${targets.length}] ${t.label}`);
   const r = spawnSync(process.execPath, [path.join(__dirname, 'scrape.js'), ...t.args, '--country', country, '--out', out],
     { cwd: root, stdio: ['ignore', 'inherit', 'inherit'], timeout: 5 * 60 * 1000 });

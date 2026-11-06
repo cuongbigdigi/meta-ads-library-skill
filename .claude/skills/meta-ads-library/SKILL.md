@@ -1,6 +1,6 @@
 ---
 name: meta-ads-library
-description: "Nghiên cứu quảng cáo đối thủ qua Meta Ads Library (thư viện quảng cáo Facebook): lấy ads đang chạy theo từ khóa hoặc Page ID, xếp hạng ad thắng (chạy lâu, nhiều biến thể), xếp hạng đối thủ trong ngách, phân tích hook/offer/format/CTA, soi landing page, tải creative, xuất báo cáo HTML, viết hook/kịch bản từ insight và theo dõi định kỳ. Dùng khi người dùng nói: soi đối thủ, spy ads, ads library, thư viện quảng cáo, đối thủ đang chạy ads gì, tìm ad thắng, nghiên cứu creative đối thủ, competitor ads, theo dõi đối thủ định kỳ, quét ads hằng ngày, báo khi đối thủ ra ad mới, tải ảnh video ad đối thủ, xuất báo cáo đối thủ, hướng dẫn dùng skill meta ads library, cài xong dùng thế nào, nhập từ khóa ở đâu, skill này làm được gì, bắt đầu soi ads, khảo sát ngành hàng, khảo sát thị trường quảng cáo, khảo sát page đối thủ, soi page theo link, tìm page id, chưa biết từ khóa gì, đề xuất từ khóa theo mô tả sản phẩm."
+description: "Nghiên cứu quảng cáo đối thủ qua Meta Ads Library (thư viện quảng cáo Facebook): lấy ads đang chạy theo từ khóa hoặc Page ID, xếp hạng ad thắng (chạy lâu, nhiều biến thể), xếp hạng đối thủ trong ngách, phân tích hook/offer/format/CTA, soi landing page, tải creative, xuất báo cáo HTML, viết hook/kịch bản từ insight và theo dõi định kỳ. Dùng khi người dùng nói: soi đối thủ, spy ads, ads library, thư viện quảng cáo, đối thủ đang chạy ads gì, tìm ad thắng, nghiên cứu creative đối thủ, competitor ads, theo dõi đối thủ định kỳ, quét ads hằng ngày, báo khi đối thủ ra ad mới, tải ảnh video ad đối thủ, xuất báo cáo đối thủ, hướng dẫn dùng skill meta ads library, cài xong dùng thế nào, nhập từ khóa ở đâu, skill này làm được gì, bắt đầu soi ads, khảo sát ngành hàng, khảo sát thị trường quảng cáo, khảo sát page đối thủ, soi page theo link, tìm page id, chưa biết từ khóa gì, đề xuất từ khóa theo mô tả sản phẩm, lấy uid page, tìm uid page facebook, lấy page id từ link, đổi link page ra id."
 ---
 
 # Meta Ads Library: soi quảng cáo đối thủ
@@ -48,22 +48,24 @@ Nhắc thêm 1 dòng: khi agent hỏi quyền chạy lệnh thì chọn cho phé
 4. Bước tiếp theo gợi ý: (1) Soi kỹ page mạnh nhất (sang Chế độ 2 với page_id có sẵn), (2) Soi landing page, (3) Xuất báo cáo HTML, (4) Viết hook/kịch bản cho sản phẩm của bạn (hỏi thông tin bước 0).
 
 ### Chế độ 2. Khảo sát page chính xác
-1. Tìm Page ID từ tên hoặc link (nhiều page cùng lúc được):
+Người dùng **chỉ cần dán link page** (facebook.com/ten.page, facebook.com/profile.php?id=..., link thư viện quảng cáo) hoặc gõ tên page. Không bao giờ bắt họ tự đi tìm UID/Page ID: tool tự đổi link ra đúng UID.
+1. Quét thẳng bằng link, tool tự lấy UID rồi quét toàn bộ ad kể cả ad đã tắt:
    ```bash
-   node tools/ad-library/find-page.js "Tên page" https://www.facebook.com/ten.page
+   node tools/ad-library/scrape.js --page https://www.facebook.com/ten.page --status all --max 150
    ```
-   - Có dòng `KHỚP:` → dùng page_id đó.
-   - Không có `KHỚP` mà ra danh sách → đưa người dùng bảng đánh số (tên, link facebook.com/..., lượt thích, ngành) và hỏi chọn số mấy. Không tự chọn dù page đầu có nhiều lượt thích nhất.
-   - Không ra gì → xin link facebook.com/... của page (mở page trên Facebook, copy thanh địa chỉ), hoặc thử tên không dấu.
-   - Đã có page_id trong file kết quả quét từ khóa thì dùng luôn, khỏi tìm.
-   - Không tự lấy số trong link `profile.php?id=100...` làm page_id: page kiểu mới có mã hồ sơ khác mã page của thư viện quảng cáo. Luôn đưa link qua `find-page.js`, tool tự mở trang Facebook lấy đúng mã.
-   - Sau khi quét, kiểm `page_name` trong file kết quả đúng page người dùng muốn rồi mới phân tích.
-2. Quét toàn bộ ad của page, kể cả ad đã tắt:
+   - Dòng `Page: <tên> | UID <số>` cho biết đã lấy đúng page nào. Báo tên page đó cho người dùng.
+   - Gõ tên page mà nhiều page trùng tên: lệnh dừng và in danh sách page gần giống. Đưa người dùng bảng đánh số (tên, link facebook.com/..., lượt thích, ngành) và hỏi chọn số mấy, rồi chạy lại với `--page-id <page_id đã chọn>`. Không tự chọn dù page đầu nhiều lượt thích nhất.
+   - Không ra page nào: xin link facebook.com/... của page (mở page trên Facebook, copy thanh địa chỉ), hoặc thử tên không dấu.
+   - Đã có page_id (từ file quét từ khóa) thì dùng `--page-id <số>`.
+   - Không tự lấy số trong link `profile.php?id=100...` làm page_id: page kiểu mới có mã hồ sơ khác mã page của thư viện quảng cáo. Cứ đưa nguyên link cho tool.
+   - Nhiều page cùng lúc, hoặc người dùng chỉ hỏi **"lấy UID page này"**: dùng `find-page.js`, trả UID + link thư viện quảng cáo của page (không cần quét ad):
+     ```bash
+     node tools/ad-library/find-page.js https://www.facebook.com/page1 https://www.facebook.com/page2 "Tên page 3"
+     ```
+2. Xếp hạng ad của page (tên file đúng nằm ở dòng `OK ... ads -> ...` mà scrape.js in ra), kiểm `page_name` trong file đúng page người dùng muốn rồi mới phân tích:
    ```bash
-   node tools/ad-library/scrape.js --page-id <page_id> --status all --max 150
    node tools/ad-library/rank.js output/page-<page_id>-VN-<ngày>.json --top 15 --min-days 1
    ```
-   (Tên file đúng nằm ở dòng `OK ... ads -> ...` mà scrape.js in ra.)
 3. Trả "hồ sơ quảng cáo" của page:
    - Số ad đang chạy / đã tắt, ad sống lâu nhất (ngày), số ad mới trong 7 và 30 ngày qua (đọc `start_date`) = nhịp ra ad.
    - Ad họ giữ lâu nhất (ad thắng của họ) và nhóm ad vài ngày đã tắt (góc họ test rồi bỏ).
@@ -101,7 +103,8 @@ Nhắc thêm 1 dòng: khi agent hỏi quyền chạy lệnh thì chọn cho phé
 ```bash
 # Theo từ khóa ngành/sản phẩm
 node tools/ad-library/scrape.js --q "kem chống nắng" --max 60
-# Theo Page đối thủ (page_id có trong kết quả quét từ khóa, hoặc tìm bằng find-page.js từ tên/link page)
+# Theo Page đối thủ: dán link page (tự lấy UID), hoặc page_id có sẵn
+node tools/ad-library/scrape.js --page https://www.facebook.com/ten.page --status all --max 100
 node tools/ad-library/scrape.js --page-id 123456789 --status all --max 100
 ```
 Tham số:
@@ -166,7 +169,7 @@ Sau đó tổng hợp: pattern lặp lại giữa các đối thủ, offer phổ
 ### 5. Theo dõi định kỳ (khi người dùng muốn quét tự động hằng ngày/tuần)
 1. Tạo `watchlist.json` ở thư mục gốc (copy từ `watchlist.example.json`):
    - `keywords`: từ khóa ngành, mỗi mục `{ "q": "...", "match": "regex lọc lạc đề" }`. Từ khóa mặc định quét `--sort new` để bắt ad mới.
-   - `pages`: page đối thủ `{ "id": "page_id", "name": "tên dễ nhớ" }`. Chưa biết đối thủ: quét từ khóa rồi chạy `pages.js --watchlist` lấy 5-10 page đầu.
+   - `pages`: page đối thủ `{ "url": "https://www.facebook.com/ten.page", "name": "tên dễ nhớ" }` (dán link là được, mỗi lần quét tự lấy UID) hoặc `{ "id": "page_id", ... }` nếu đã có ID (nhanh hơn). Chưa biết đối thủ: quét từ khóa rồi chạy `pages.js --watchlist` lấy 5-10 page đầu.
    - `discord_webhook` hoặc `telegram: { "bot_token": "...", "chat_id": "..." }` (không bắt buộc) để nhận báo cáo.
    Hỏi người dùng ngách và đối thủ cần theo dõi nếu chưa rõ.
 2. Chạy thử: `node tools/ad-library/watch.js`. Lần đầu chỉ lưu mốc. Từ lần sau báo: ad mới, ad vừa sống qua mốc 7/14/30 ngày (ứng viên ad thắng), ad của page đối thủ đã tắt, xu hướng số ad qua các lần quét (đối thủ tăng ad mạnh = đang đẩy ngân sách). Báo cáo ở `output/watch/latest.md`.

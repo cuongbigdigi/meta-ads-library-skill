@@ -7,6 +7,7 @@
  * Dùng:
  *   node tools/ad-library/scrape.js --q "kem chống nắng" --max 60
  *   node tools/ad-library/scrape.js --page-id 123456789 --status all --max 100
+ *   node tools/ad-library/scrape.js --page https://www.facebook.com/ten.page --status all   (dán link, tự lấy UID)
  * Tham số:
  *   --country VN (mặc định) | --status active|inactive|all (mặc định active)
  *   --media all|image|video | --out file.json | --headed (hiện trình duyệt để xem)
@@ -22,20 +23,24 @@ const argv = process.argv.slice(2);
 const arg = (k, d) => { const i = argv.indexOf('--' + k); return i >= 0 && argv[i + 1] && !argv[i + 1].startsWith('--') ? argv[i + 1] : d; };
 const flag = (k) => argv.includes('--' + k);
 
-const q = arg('q'), pageId = arg('page-id');
+const q = arg('q');
+let pageId = arg('page-id') || arg('page'); // nhận cả số ID lẫn link page facebook.com/... (tự đổi ra ID)
 const country = arg('country', 'VN'), status = arg('status', 'active'), media = arg('media', 'all');
 const max = parseInt(arg('max', '50'), 10), cdpPort = arg('cdp-port');
 if (!q && !pageId) { console.error('Thiếu --q "từ khóa" hoặc --page-id <id>'); process.exit(1); }
 
-const params = new URLSearchParams({ active_status: status, ad_type: 'all', country, media_type: media });
-if (pageId) { params.set('view_all_page_id', pageId); params.set('search_type', 'page'); }
-// Mặc định khớp đúng cụm từ: kiểu khớp lỏng (--loose) trả cả ad chỉ dính 1 chữ, lẫn rất nhiều ad lạc đề
-else if (flag('loose')) { params.set('q', q); params.set('search_type', 'keyword_unordered'); }
-else { params.set('q', `"${q.replace(/"/g, '')}"`); params.set('search_type', 'keyword_exact_phrase'); }
-// --sort top (mặc định): ad nhiều lượt hiển thị trước, lộ ra ad chạy lâu/ad thắng.
-// --sort new: ad mới lên trước, dùng để bắt ad đối thủ vừa tung ra.
-const sort = arg('sort', 'top') === 'new' ? '&sort_data[direction]=desc&sort_data[mode]=relevancy_monthly_grouped' : '&sort_data[direction]=desc&sort_data[mode]=total_impressions';
-const url = 'https://www.facebook.com/ads/library/?' + params.toString() + sort;
+function buildUrl() {
+  const params = new URLSearchParams({ active_status: status, ad_type: 'all', country, media_type: media });
+  if (pageId) { params.set('view_all_page_id', pageId); params.set('search_type', 'page'); }
+  // Mặc định khớp đúng cụm từ: kiểu khớp lỏng (--loose) trả cả ad chỉ dính 1 chữ, lẫn rất nhiều ad lạc đề
+  else if (flag('loose')) { params.set('q', q); params.set('search_type', 'keyword_unordered'); }
+  else { params.set('q', `"${q.replace(/"/g, '')}"`); params.set('search_type', 'keyword_exact_phrase'); }
+  // --sort top (mặc định): ad nhiều lượt hiển thị trước, lộ ra ad chạy lâu/ad thắng.
+  // --sort new: ad mới lên trước, dùng để bắt ad đối thủ vừa tung ra.
+  const sort = arg('sort', 'top') === 'new' ? '&sort_data[direction]=desc&sort_data[mode]=relevancy_monthly_grouped' : '&sort_data[direction]=desc&sort_data[mode]=total_impressions';
+  const url = 'https://www.facebook.com/ads/library/?' + params.toString() + sort;
+  return url;
+}
 
 const ads = new Map();
 
@@ -94,6 +99,18 @@ function parseText(t) {
 }
 
 (async () => {
+  if (pageId && !/^\d+$/.test(pageId)) {
+    console.error('Đang lấy UID của page từ link:', pageId);
+    const [r] = await require('./find-page').resolvePages([pageId], { country });
+    if (!r || !r.matched) {
+      const list = r && r.candidates.length ? r.candidates.map(c => `  ${c.name} | page_id ${c.page_id} | ${c.fb_url}`).join('\n') : '';
+      console.error(`Không xác định được đúng page từ "${pageId}". ` + (list ? 'Các page gần giống, chọn page_id đúng rồi chạy lại:\n' + list : 'Kiểm tra lại link page.'));
+      process.exit(1);
+    }
+    console.error(`Page: ${r.matched.name} | UID ${r.matched.page_id}`);
+    pageId = r.matched.page_id;
+  }
+  const url = buildUrl();
   const browser = cdpPort
     ? await chromium.connectOverCDP(`http://127.0.0.1:${cdpPort}`)
     : await chromium.launch({ headless: !flag('headed'), args: ['--disable-blink-features=AutomationControlled'] });

@@ -2,7 +2,7 @@
 
 **Skill cho Claude Code và Codex: soi quảng cáo đối thủ trên Meta Ads Library, xếp hạng ad thắng, phân tích hook, offer, CTA.**
 
-Phiên bản 1.6.0, cập nhật 06/11/2026.
+Phiên bản 1.6.1, cập nhật 06/11/2026.
 
 Bộ này giúp AI agent (Claude Code, Codex) tự lấy quảng cáo đối thủ trên thư viện quảng cáo của Meta, xếp hạng ad đang ra tiền và đối thủ mạnh nhất ngách, phân tích hook, offer, format, CTA, soi landing page, tải ảnh/video ad về máy, xuất báo cáo HTML và theo dõi đối thủ mỗi ngày. Không cần đăng nhập Facebook, không cần token.
 
@@ -79,15 +79,18 @@ Gõ **"Bắt đầu soi ads"**, agent hiện menu 3 cách và dẫn từng bư�
 | Cách | Khi nào | Câu mẫu | Agent làm gì |
 |---|---|---|---|
 | 1. Khảo sát ngành hàng | Biết tên ngành, sản phẩm | "Khảo sát ngành [nến thơm]: top ad thắng, page mạnh nhất, hook và offer." | Quét 2-3 cách gọi của ngành, xếp hạng ad thắng và page mạnh nhất, phân tích hook/offer |
-| 2. Khảo sát page chính xác | Có tên page hoặc link Facebook đối thủ | "Khảo sát page [facebook.com/ten.page]: họ chạy ad nào, giữ ad nào lâu nhất, đang test gì?" | Tìm đúng Page ID từ tên/link (nhiều page trùng tên thì hỏi bạn chọn), quét cả ad đang chạy và đã tắt, lập hồ sơ quảng cáo của page |
+| 2. Khảo sát page chính xác | Có link page Facebook đối thủ (hoặc tên page) | "Khảo sát page https://www.facebook.com/ten.page: họ chạy ad nào, giữ ad nào lâu nhất, đang test gì?" | Tự đổi link ra UID page (nhiều page trùng tên thì hỏi bạn chọn), quét cả ad đang chạy và đã tắt, lập hồ sơ quảng cáo của page |
 | 3. Chưa biết từ khóa | Chỉ mô tả được sản phẩm | "Em bán [ví da nam handmade, giá 500k, khách nam 25-40]. Đề xuất giúp em từ khóa để soi đối thủ." | Đề xuất 6-8 từ khóa theo nhóm, quét thử nhanh xem từ nào nhiều ad đúng ngách, chọn 2-3 từ tốt nhất rồi khảo sát |
+
+**Soi page đối thủ: chỉ cần dán link page, không cần UID.** Link dạng `facebook.com/ten.page`, `facebook.com/profile.php?id=...` hay link thư viện quảng cáo đều được. Skill tự đổi link ra đúng UID (Page ID) mà thư viện quảng cáo dùng, kể cả page kiểu mới có 2 mã số khác nhau. Cần UID để dùng việc khác thì nhờ: "Lấy UID của page [link]", skill trả UID và link thư viện quảng cáo của page.
 
 ### Câu lệnh mẫu theo mục tiêu
 | Muốn | Câu mẫu |
 |---|---|
 | Tìm ad đang ra tiền | "Soi ngách [nến thơm], cho anh top 10 ad chạy lâu nhất và phân tích hook, offer." |
 | Biết đối thủ là ai | "Ngách [máy lọc nước] có những page nào chạy ads mạnh nhất? Xếp hạng giúp em." |
-| Soi kỹ 1 đối thủ | "Quét toàn bộ quảng cáo của page [link hoặc ID page], kể cả ad đã tắt. Họ test gì, giữ gì?" |
+| Soi kỹ 1 đối thủ | "Quét toàn bộ quảng cáo của page [dán link page Facebook], kể cả ad đã tắt. Họ test gì, giữ gì?" |
+| Lấy UID page | "Lấy UID của các page này: [dán 1 hay nhiều link page]" |
 | Lấy ý tưởng hook | "Gom các kiểu hook đang dùng trong ngách [mỹ phẩm thuần chay], mỗi kiểu 2 ví dụ." |
 | So giá, so offer | "So sánh giá, combo, quà tặng của 5 đối thủ đứng đầu ngách [đồ ăn vặt], soi cả landing page." |
 | Chuẩn bị mùa | "Ngách [hồng sâm] đang chạy gì cho Tết? Ad nào mới lên trong 2 tuần nay?" |
@@ -146,7 +149,7 @@ Lưu ý: máy tính phải đang bật lúc đến giờ quét. Nên theo dõi d
 | File | Dùng để |
 |---|---|
 | `tools/ad-library/scrape.js` | Mở thư viện quảng cáo, lấy dữ liệu ad |
-| `tools/ad-library/find-page.js` | Tìm Page ID từ tên page hoặc link Facebook (để soi đúng page đối thủ) |
+| `tools/ad-library/find-page.js` | Lấy UID (Page ID) từ link hoặc tên page; `scrape.js --page <link>` và theo dõi định kỳ dùng tool này tự động |
 | `tools/ad-library/rank.js` | Xếp hạng ad thắng (chạy lâu, nhiều biến thể) |
 | `tools/ad-library/pages.js` | Xếp hạng đối thủ trong ngách (số ad, ad mới, ad sống lâu) |
 | `tools/ad-library/report.js` | Xuất báo cáo HTML có ảnh, mở bằng trình duyệt |
@@ -207,6 +210,7 @@ Skill này được chia sẻ miễn phí từ nhóm **Ads AI lo - Tự động 
 👉 [zalo.me/g/37yoic8thaeho75yicnb](https://zalo.me/g/37yoic8thaeho75yicnb)
 
 ## Thay đổi
+- **1.6.1 (06/11/2026)**: soi page chỉ cần dán link, không cần UID: `scrape.js --page <link>` tự lấy UID rồi quét; danh sách theo dõi nhận `"url"` của page; lấy đúng UID cả với page kiểu mới (link `profile.php?id=` có mã hồ sơ khác mã page); nhờ skill "lấy UID page" là có UID + link thư viện quảng cáo.
 - **1.6.0 (06/11/2026)**: 3 cách bắt đầu dẫn từng bước: khảo sát ngành hàng, khảo sát page chính xác (tool mới `find-page.js` tìm Page ID từ tên hoặc link, nhiều page trùng tên thì hỏi chọn), chưa biết từ khóa thì AI đề xuất từ mô tả sản phẩm và quét thử chọn từ tốt nhất. Gõ "Bắt đầu soi ads" là có menu.
 - **1.5.0 (06/11/2026)**: cài xong tự mở trang hướng dẫn `huong-dan.html` (gõ ở đâu, có cần mở lại agent không, câu lệnh mẫu 5 cấp bấm Copy, mẹo chọn từ khóa, lỗi thường gặp); tạo biểu tượng Desktop mở hướng dẫn và mở Claude Code/Codex; skill biết trả lời khi khách hỏi "dùng thế nào".
 - **1.4.0 (05/11/2026)**: bộ cài 1 click cho Windows (`cai-dat.bat`): tự cài Node.js, thư viện, Chromium, quét thử, cài skill dùng chung cho Claude Code và Codex, ghi log `cai-dat.log` để gửi hỗ trợ. Mac liên hệ nhóm Zalo.

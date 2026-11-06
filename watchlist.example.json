@@ -14,8 +14,12 @@
   ],
   "pages": [
     {
+      "url": "https://www.facebook.com/ten.page.doi.thu",
+      "name": "Đối thủ A (dán link page, tự lấy UID)"
+    },
+    {
       "id": "123456789",
-      "name": "Đối thủ A"
+      "name": "Đối thủ B (đã biết UID thì ghi id, quét nhanh hơn)"
     }
   ],
   "discord_webhook": "",

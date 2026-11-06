@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
- * Tìm Page ID của đối thủ từ tên page hoặc link Facebook, để quét đúng page đó (scrape.js --page-id).
+ * Lấy UID (Page ID) của page từ link Facebook hoặc tên page, để quét đúng page đó (scrape.js --page-id).
+ * Không cần tự tìm UID: dán link facebook.com/ten.page hoặc profile.php?id=... là đủ.
  * Dùng ô gợi ý "Tìm theo từ khóa hoặc nhà quảng cáo" của thư viện quảng cáo, không cần đăng nhập.
  *
  * Dùng:
@@ -14,10 +15,6 @@ const fs = require('fs');
 const path = require('path');
 const { chromium } = require('playwright');
 const { parseArgs, slug } = require('./lib');
-
-const { opt, flag, files: args } = parseArgs(['headed']);
-const top = parseInt(opt('top', '5'), 10), country = opt('country', 'VN');
-if (!args.length) { console.error('Thiếu tên page hoặc link. Ví dụ: node tools/ad-library/find-page.js "Chalames"'); process.exit(1); }
 
 // Link Facebook -> { id } nếu link đã chứa số ID, hoặc { alias } (phần sau facebook.com/) để tra
 function parseInput(s) {
@@ -38,8 +35,13 @@ function parseInput(s) {
 
 const norm = (s) => (s || '').toLowerCase().normalize('NFD').replace(/\p{M}/gu, '').replace(/đ/g, 'd').replace(/[^\p{L}\p{N}]+/gu, '');
 
-(async () => {
-  const browser = await chromium.launch({ headless: !flag('headed'), args: ['--disable-blink-features=AutomationControlled'] });
+/**
+ * Đổi danh sách tên/link page thành page_id thư viện quảng cáo dùng.
+ * Trả mảng { input, matched: {page_id, name, alias, ads_library_url} | null, candidates: [...] }.
+ * scrape.js và watch.js gọi hàm này khi người dùng đưa link page thay vì số ID.
+ */
+async function resolvePages(args, { country = 'VN', top = 5, headed = false } = {}) {
+  const browser = await chromium.launch({ headless: !headed, args: ['--disable-blink-features=AutomationControlled'] });
   const ctx = await browser.newContext({ locale: 'vi-VN', viewport: { width: 1366, height: 900 } });
   const page = await ctx.newPage();
   const responses = []; // [{ query, pages }]
@@ -132,6 +134,16 @@ const norm = (s) => (s || '').toLowerCase().normalize('NFD').replace(/\p{M}/gu, 
     results.push({ input: raw, matched: exact ? { ...exact, exact: true } : null, facebook: fb, candidates: cands.slice(0, top) });
   }
   await browser.close();
+  return results;
+}
+
+module.exports = { resolvePages, parseInput };
+
+if (require.main === module) (async () => {
+  const { opt, flag, files: args } = parseArgs(['headed']);
+  const top = parseInt(opt('top', '5'), 10), country = opt('country', 'VN');
+  if (!args.length) { console.error('Thiếu tên page hoặc link. Ví dụ: node tools/ad-library/find-page.js https://www.facebook.com/ten.page'); process.exit(1); }
+  const results = await resolvePages(args, { country, top, headed: flag('headed') });
 
   for (const r of results) {
     console.log(`\n=== ${r.input}`);
@@ -146,5 +158,5 @@ const norm = (s) => (s || '').toLowerCase().normalize('NFD').replace(/\p{M}/gu, 
   const file = path.join(dir, `find-page-${slug(args[0]).slice(0, 40)}-${new Date().toISOString().slice(0, 10)}.json`);
   fs.writeFileSync(file, JSON.stringify(results, null, 2));
   console.log(`\nĐã lưu ${file}`);
-  console.log('Bước tiếp: node tools/ad-library/scrape.js --page-id <page_id> --status all --max 100');
+  console.log('Bước tiếp: node tools/ad-library/scrape.js --page-id <page_id hoặc link page> --status all --max 100');
 })().catch(e => { console.error('LỖI:', e.message); process.exit(1); });

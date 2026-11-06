@@ -124,8 +124,8 @@ a{color:var(--accent)}
       <div class="modes">
         <div class="mode"><span class="tag">Cách 1</span><h4>Khảo sát ngành hàng</h4><div class="when">Bạn biết tên ngành, sản phẩm</div>
           <div class="prompt"><div class="txt">Khảo sát ngành [nến thơm]: top ad thắng, page mạnh nhất, hook và offer.</div><button class="copy">Copy</button></div></div>
-        <div class="mode"><span class="tag">Cách 2</span><h4>Khảo sát page chính xác</h4><div class="when">Bạn có tên page hoặc link Facebook đối thủ</div>
-          <div class="prompt"><div class="txt">Khảo sát page [dán link facebook.com/... hoặc tên page]: họ chạy những ad nào, giữ ad nào lâu nhất, đang test gì?</div><button class="copy">Copy</button></div></div>
+        <div class="mode"><span class="tag">Cách 2</span><h4>Khảo sát page chính xác</h4><div class="when">Chỉ cần dán link page Facebook đối thủ, không cần UID</div>
+          <div class="prompt"><div class="txt">Khảo sát page [dán link page Facebook, ví dụ https://www.facebook.com/ten.page]: họ chạy những ad nào, giữ ad nào lâu nhất, đang test gì?</div><button class="copy">Copy</button></div></div>
         <div class="mode"><span class="tag">Cách 3</span><h4>Chưa biết từ khóa</h4><div class="when">Mô tả sản phẩm, AI đề xuất từ khóa rồi quét thử</div>
           <div class="prompt"><div class="txt">Em bán [ví da nam handmade, giá 500k, khách nam 25-40]. Đề xuất giúp em từ khóa để soi đối thủ.</div><button class="copy">Copy</button></div></div>
       </div>
@@ -194,6 +194,7 @@ a{color:var(--accent)}
 <div class="faq">
   <details><summary>Agent trả lời chung chung, không chạy tool</summary><p>Agent chưa nhận skill. Tắt hẳn agent rồi mở lại (bước 1), hoặc nói rõ: <code>Dùng skill meta-ads-library để soi ngách [...]</code>.</p></details>
   <details><summary>Agent cứ hỏi xin phép chạy lệnh</summary><p>Bình thường: agent cần chạy tool trên máy bạn. Chọn Yes / Allow. Có nút "luôn cho phép" (always allow / don't ask again) thì chọn để đỡ hỏi.</p></details>
+  <details><summary>Có cần tìm UID / Page ID của page đối thủ không?</summary><p>Không. Chỉ cần dán link page (ví dụ <code>https://www.facebook.com/ten.page</code> hoặc link <code>profile.php?id=...</code>), skill tự đổi ra đúng UID mà thư viện quảng cáo dùng. Cần UID để làm việc khác thì gõ: <code>Lấy UID của page [dán link]</code>.</p></details>
   <details><summary>Chạy lâu quá</summary><p>Mỗi từ khóa mất 30-90 giây, quét nhiều từ khóa hoặc soi landing page có thể 3-5 phút. Cứ để agent chạy, đừng tắt cửa sổ.</p></details>
   <details><summary>Ra 0 quảng cáo hoặc ra ít</summary><p>Đổi cách gọi khác phổ biến hơn. Vẫn 0 với mọi từ khóa: nói với agent "chạy npm run doctor" để kiểm tra máy, rồi gửi kết quả vào nhóm Zalo.</p></details>
   <details><summary>Có cần chạy lại bộ cài không?</summary><p>Không, chỉ cài 1 lần. Chỉ chạy lại <code>cai-dat.bat</code> khi: chuyển thư mục cài sang chỗ khác, tải bản mới về, hoặc cài lỗi.</p></details>
