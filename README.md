@@ -2,7 +2,7 @@
 
 **Skill cho Claude Code và Codex: soi quảng cáo đối thủ trên Meta Ads Library, xếp hạng ad thắng, phân tích hook, offer, CTA.**
 
-Phiên bản 1.4.0, cập nhật 05/11/2026.
+Phiên bản 1.5.0, cập nhật 06/11/2026.
 
 Bộ này giúp AI agent (Claude Code, Codex) tự lấy quảng cáo đối thủ trên thư viện quảng cáo của Meta, xếp hạng ad đang ra tiền và đối thủ mạnh nhất ngách, phân tích hook, offer, format, CTA, soi landing page, tải ảnh/video ad về máy, xuất báo cáo HTML và theo dõi đối thủ mỗi ngày. Không cần đăng nhập Facebook, không cần token.
 
@@ -25,6 +25,15 @@ Bộ này giúp AI agent (Claude Code, Codex) tự lấy quảng cáo đối th�
    - Windows hiện "Windows protected your PC"? Bấm **More info / Thông tin thêm** rồi **Run anyway / Vẫn chạy**.
    - Windows hỏi quyền cài Node.js thì bấm **Yes**.
 4. Chờ cửa sổ đen chạy hết 6 bước, thấy chữ xanh **CÀI ĐẶT HOÀN TẤT** là xong.
+
+**Cài xong dùng thế nào?** Bộ cài tự mở trang hướng dẫn (`huong-dan.html`) và tạo 3 biểu tượng ngoài Desktop:
+- **Huong dan Meta Ads Library**: mở lại hướng dẫn, có câu lệnh mẫu bấm Copy, từ dễ đến khai thác sâu.
+- **Soi ads doi thu (Claude Code)** / **Soi ads doi thu (Codex)**: bấm đúp là mở agent, gõ yêu cầu vào ô chat.
+
+Ba điều người mới hay nhầm:
+1. **Không gõ từ khóa vào cửa sổ đen của bộ cài.** Từ khóa gõ vào **ô chat của Claude Code hoặc Codex**, bằng tiếng Việt bình thường, ví dụ: "Soi đối thủ ngành nến thơm, cho anh top 10 ad thắng".
+2. **Đang mở Claude Code / Codex lúc cài thì tắt hẳn rồi mở lại** để agent nhận skill mới.
+3. Agent **xin phép chạy lệnh** thì chọn Yes / Allow. Mỗi lần quét mất 1-3 phút.
 
 Bộ cài tự làm hết:
 - Cài Node.js nếu máy chưa có (hoặc bản quá cũ).
@@ -136,6 +145,7 @@ Lưu ý: máy tính phải đang bật lúc đến giờ quét. Nên theo dõi d
 | `tools/ad-library/watch.js` | Theo dõi định kỳ: so với lần quét trước, báo ad mới / qua mốc ngày / đã tắt / xu hướng |
 | `tools/ad-library/doctor.js` | Kiểm tra máy (`npm run doctor`) khi cài lỗi |
 | `cai-dat.bat` + `tools/install/cai-dat.ps1` | Bộ cài 1 click cho Windows |
+| `huong-dan.html` | Trang hướng dẫn sau khi cài: dùng ở đâu, câu lệnh mẫu bấm Copy |
 | `watchlist.example.json` | Mẫu danh sách từ khóa + page đối thủ cần theo dõi |
 | `.claude/skills/meta-ads-library/SKILL.md` | Skill cho Claude Code: khi nào dùng, quy trình, cách phân tích |
 | `AGENTS.md` | Để Codex biết skill này |
@@ -187,6 +197,7 @@ Skill này được chia sẻ miễn phí từ nhóm **Ads AI lo - Tự động 
 👉 [zalo.me/g/37yoic8thaeho75yicnb](https://zalo.me/g/37yoic8thaeho75yicnb)
 
 ## Thay đổi
+- **1.5.0 (06/11/2026)**: cài xong tự mở trang hướng dẫn `huong-dan.html` (gõ ở đâu, có cần mở lại agent không, câu lệnh mẫu 5 cấp bấm Copy, mẹo chọn từ khóa, lỗi thường gặp); tạo biểu tượng Desktop mở hướng dẫn và mở Claude Code/Codex; skill biết trả lời khi khách hỏi "dùng thế nào".
 - **1.4.0 (05/11/2026)**: bộ cài 1 click cho Windows (`cai-dat.bat`): tự cài Node.js, thư viện, Chromium, quét thử, cài skill dùng chung cho Claude Code và Codex, ghi log `cai-dat.log` để gửi hỗ trợ. Mac liên hệ nhóm Zalo.
 - **1.3.0 (05/11/2026)**:
   - Sửa lỗi quan trọng: tìm theo từ khóa giờ **khớp đúng cụm từ** (trước đây khớp lỏng, ra nhiều ad lạc đề) và **ưu tiên ad nhiều hiển thị** (trước đây ra toàn ad mới 1 ngày nên khó thấy ad thắng). Thêm `--sort new` và `--loose` khi cần kiểu cũ.

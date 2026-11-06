@@ -4,7 +4,8 @@
 # Ghi toàn bộ quá trình vào cai-dat.log để gửi nhóm Zalo khi cần hỗ trợ.
 param(
   [switch]$NoOpen,        # không hỏi mở Claude Code/Codex ở cuối (dùng khi test)
-  [string]$SkillHome = $HOME  # nơi cài skill dùng chung (mặc định thư mục người dùng)
+  [string]$SkillHome = $HOME,  # nơi cài skill dùng chung (mặc định thư mục người dùng)
+  [string]$DesktopDir = [Environment]::GetFolderPath('Desktop')  # nơi tạo biểu tượng (đổi khi test)
 )
 
 $ErrorActionPreference = 'Continue'
@@ -150,23 +151,52 @@ foreach ($agent in @('.claude', '.codex')) {
 Warn 'Đừng xóa hoặc đổi tên thư mục này, skill dùng chung đang trỏ về đây. Lỡ chuyển chỗ thì chạy lại cai-dat.bat.'
 
 # ---------- 6. Mở agent ----------
-Step 6 'Xong! Bắt đầu dùng'
+Step 6 'Tạo biểu tượng ngoài Desktop và mở hướng dẫn'
 $claude = Get-Command claude -ErrorAction SilentlyContinue
 $codex = Get-Command codex -ErrorAction SilentlyContinue
+$guide = Join-Path $Root 'huong-dan.html'
+try {
+  $ws = New-Object -ComObject WScript.Shell
+  function New-Shortcut($name, $target, $arguments, $desc) {
+    $lnk = $ws.CreateShortcut((Join-Path $DesktopDir "$name.lnk"))
+    $lnk.TargetPath = $target
+    if ($arguments) { $lnk.Arguments = $arguments }
+    $lnk.WorkingDirectory = $Root
+    $lnk.Description = $desc
+    $lnk.Save()
+  }
+  New-Shortcut 'Huong dan Meta Ads Library' $guide $null 'Cách dùng skill soi quảng cáo đối thủ, câu lệnh mẫu'
+  Ok 'Biểu tượng "Huong dan Meta Ads Library" (mở lại hướng dẫn bất cứ lúc nào)'
+  if ($claude) { New-Shortcut 'Soi ads doi thu (Claude Code)' "$env:ComSpec" "/k cd /d `"$Root`" && claude" 'Mở Claude Code để soi quảng cáo đối thủ'; Ok 'Biểu tượng "Soi ads doi thu (Claude Code)"' }
+  if ($codex) { New-Shortcut 'Soi ads doi thu (Codex)' "$env:ComSpec" "/k cd /d `"$Root`" && codex" 'Mở Codex để soi quảng cáo đối thủ'; Ok 'Biểu tượng "Soi ads doi thu (Codex)"' }
+} catch { Warn "Không tạo được biểu tượng Desktop: $($_.Exception.Message)" }
+
 if (-not $claude -and -not $codex) {
-  Warn 'Chưa thấy Claude Code hoặc Codex trên máy. Skill cần 1 trong 2 để chạy:'
+  Warn 'Chưa thấy Claude Code/Codex dạng dòng lệnh. Dùng app Claude hoặc Codex trên máy tính cũng được.'
+  Warn 'Chưa có app nào thì xem video cài trong trang hướng dẫn:'
   Write-Host '      Cài Codex:       https://www.facebook.com/reel/1051710833986249'
   Write-Host '      Cài Claude Code: https://www.youtube.com/watch?v=ON6H2YbnoVg'
-  Write-Host '      (Dùng app Claude hoặc Codex bản máy tính cũng được: mở thư mục này trong app.)'
-} else {
-  Write-Host '  Mở Claude Code hoặc Codex (ở thư mục nào cũng được) rồi gõ thử:'
-  Write-Host '      Soi đối thủ ngành nến thơm, cho anh top 10 ad thắng và phân tích.' -ForegroundColor White
-  if (-not $NoOpen) {
-    $pick = if ($claude -and $codex) { Read-Host '  Mở ngay? Gõ 1 = Claude Code, 2 = Codex, Enter = để sau' }
+}
+
+Write-Host ''
+Write-Host '  ---------------------------------------------------------' -ForegroundColor White
+Write-Host '  DÙNG THẾ NÀO TIẾP THEO?' -ForegroundColor White
+Write-Host '  1. KHÔNG gõ từ khóa vào cửa sổ đen này. Cửa sổ này chỉ để cài.' -ForegroundColor White
+Write-Host '  2. Đang mở Claude Code / Codex thì TẮT HẲN rồi MỞ LẠI (để nhận skill mới).' -ForegroundColor White
+Write-Host '  3. Mở agent (biểu tượng "Soi ads doi thu" ngoài Desktop, hoặc app Claude/Codex),' -ForegroundColor White
+Write-Host '     gõ vào ô chat bằng tiếng Việt, ví dụ:' -ForegroundColor White
+Write-Host '     Soi đối thủ ngành nến thơm, cho anh top 10 ad thắng và phân tích.' -ForegroundColor Yellow
+Write-Host '  4. Agent xin phép chạy lệnh thì chọn Yes / Allow.' -ForegroundColor White
+Write-Host '  Đang mở trang hướng dẫn chi tiết (có câu lệnh mẫu bấm Copy)...' -ForegroundColor White
+Write-Host '  ---------------------------------------------------------' -ForegroundColor White
+if (-not $NoOpen) {
+  Start-Process $guide
+  if ($claude -or $codex) {
+    $pick = if ($claude -and $codex) { Read-Host '  Mở agent ngay? Gõ 1 = Claude Code, 2 = Codex, Enter = để sau' }
             elseif ($claude) { if ((Read-Host '  Mở Claude Code ngay? (c/k)') -match '^[cCyY]') { '1' } }
             else { if ((Read-Host '  Mở Codex ngay? (c/k)') -match '^[cCyY]') { '2' } }
-    if ($pick -eq '1') { Start-Process cmd.exe -ArgumentList "/k cd /d `"$Root`" && claude" }
-    if ($pick -eq '2') { Start-Process cmd.exe -ArgumentList "/k cd /d `"$Root`" && codex" }
+    if ($pick -eq '1') { Start-Process $env:ComSpec -ArgumentList "/k cd /d `"$Root`" && claude" }
+    if ($pick -eq '2') { Start-Process $env:ComSpec -ArgumentList "/k cd /d `"$Root`" && codex" }
   }
 }
 if (-not $script:Failed) { Write-Host ''; Write-Host ' CÀI ĐẶT HOÀN TẤT' -ForegroundColor Green }

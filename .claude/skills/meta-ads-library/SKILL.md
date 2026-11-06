@@ -1,6 +1,6 @@
 ---
 name: meta-ads-library
-description: "Nghiên cứu quảng cáo đối thủ qua Meta Ads Library (thư viện quảng cáo Facebook): lấy ads đang chạy theo từ khóa hoặc Page ID, xếp hạng ad thắng (chạy lâu, nhiều biến thể), xếp hạng đối thủ trong ngách, phân tích hook/offer/format/CTA, soi landing page, tải creative, xuất báo cáo HTML, viết hook/kịch bản từ insight và theo dõi định kỳ. Dùng khi người dùng nói: soi đối thủ, spy ads, ads library, thư viện quảng cáo, đối thủ đang chạy ads gì, tìm ad thắng, nghiên cứu creative đối thủ, competitor ads, theo dõi đối thủ định kỳ, quét ads hằng ngày, báo khi đối thủ ra ad mới, tải ảnh video ad đối thủ, xuất báo cáo đối thủ."
+description: "Nghiên cứu quảng cáo đối thủ qua Meta Ads Library (thư viện quảng cáo Facebook): lấy ads đang chạy theo từ khóa hoặc Page ID, xếp hạng ad thắng (chạy lâu, nhiều biến thể), xếp hạng đối thủ trong ngách, phân tích hook/offer/format/CTA, soi landing page, tải creative, xuất báo cáo HTML, viết hook/kịch bản từ insight và theo dõi định kỳ. Dùng khi người dùng nói: soi đối thủ, spy ads, ads library, thư viện quảng cáo, đối thủ đang chạy ads gì, tìm ad thắng, nghiên cứu creative đối thủ, competitor ads, theo dõi đối thủ định kỳ, quét ads hằng ngày, báo khi đối thủ ra ad mới, tải ảnh video ad đối thủ, xuất báo cáo đối thủ, hướng dẫn dùng skill meta ads library, cài xong dùng thế nào, nhập từ khóa ở đâu, skill này làm được gì."
 ---
 
 # Meta Ads Library: soi quảng cáo đối thủ
@@ -18,6 +18,19 @@ Nếu thư mục gốc chưa có `node_modules`, chạy `npm install` ở đó t
 Lỗi lạ khi chạy: chạy `npm run doctor`, nó kiểm Node, thư viện, trình duyệt, quét thử 3 ad và chỉ cách sửa.
 Trên Windows, cài mãi không được (Node, npm, Chromium): bảo người dùng bấm đúp `cai-dat.bat` ở thư mục gốc, bộ cài tự xử lý và ghi `cai-dat.log`. Người dùng Mac cần hỗ trợ cài: hướng dẫn liên hệ nhóm Zalo https://zalo.me/g/37yoic8thaeho75yicnb.
 Kết quả nằm trong `output/` của thư mục gốc đó, không phải thư mục dự án người dùng đang mở.
+
+## Người dùng mới hỏi "dùng thế nào", "nhập từ khóa ở đâu", "làm được gì"
+Trả lời ngắn, không chạy tool:
+1. Họ đang ở đúng chỗ: cứ gõ yêu cầu bằng tiếng Việt vào ô chat này, không cần lệnh hay cú pháp. Từ khóa nằm luôn trong câu, ví dụ "Soi đối thủ ngành nến thơm".
+2. Đưa 5 câu thử (mỗi câu 1 dòng, để họ copy):
+   - Soi đối thủ ngành [nến thơm], cho anh top 10 ad thắng và phân tích hook, offer.
+   - Ngách [máy lọc nước] có những page nào chạy ads mạnh nhất?
+   - Tải ảnh và video của top 10 ad về máy.
+   - Xuất báo cáo HTML có ảnh cho ngách [hồng sâm].
+   - Theo dõi ngách [nến thơm] và 5 đối thủ mạnh nhất, quét mỗi sáng 8h.
+3. Nhắc: khi được hỏi quyền chạy lệnh thì chọn cho phép; mỗi lần quét mất 1-3 phút.
+4. Hướng dẫn đầy đủ có câu lệnh mẫu bấm Copy: file `huong-dan.html` ở thư mục gốc (Windows: biểu tượng "Huong dan Meta Ads Library" ngoài Desktop). Mở file đó cho họ nếu được.
+Rồi hỏi họ muốn soi ngành nào để làm luôn.
 
 ## Bước 0. Hỏi nhanh trước khi làm
 - **Chỉ muốn xem thị trường** ("đối thủ đang chạy gì", "soi ngách X"): làm luôn, không hỏi.

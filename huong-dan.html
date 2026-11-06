@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hướng dẫn Meta Ads Library</title>
+<style>
+:root{--bg:#f6f4f1;--card:#fff;--ink:#1d1b19;--mute:#6b665f;--line:#e6e1da;--accent:#9b2335;--soft:#f5e6e8;--ok:#1f7a4d;--okbg:#e3f3ea;--warn:#8a5a00;--warnbg:#fbf0d9;--code:#f1ede8}
+@media (prefers-color-scheme:dark){:root{--bg:#161514;--card:#211f1d;--ink:#f1ede8;--mute:#a49d94;--line:#34302c;--accent:#e0687a;--soft:#3a2328;--ok:#5fd09a;--okbg:#17322a;--warn:#f0b34a;--warnbg:#3a2e17;--code:#2b2825}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:920px;margin:0 auto;padding:32px 16px 64px}
+h1{font-size:30px;line-height:1.25;margin:0 0 8px}
+h2{font-size:22px;margin:44px 0 6px}
+h3{font-size:17px;margin:0 0 6px}
+p{margin:6px 0}
+.sub{color:var(--mute);margin:0 0 18px}
+.badge{display:inline-block;background:var(--okbg);color:var(--ok);font-weight:600;font-size:14px;padding:4px 12px;border-radius:99px;margin-bottom:14px}
+.alert{border-radius:12px;padding:14px 18px;margin:16px 0;border:1px solid transparent}
+.alert.warn{background:var(--warnbg);color:var(--ink);border-color:var(--warn)}
+.alert b{color:var(--warn)}
+.steps{display:grid;gap:14px;margin-top:14px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;display:grid;grid-template-columns:44px 1fr;gap:14px}
+.num{width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:700;font-size:20px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.tabs button{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:6px 12px;border-radius:99px;cursor:pointer}
+.tabs button[aria-selected=true]{background:var(--accent);border-color:var(--accent);color:#fff}
+.panel{display:none;background:var(--bg);border-radius:10px;padding:12px 16px}
+.panel.on{display:block}
+.panel ol{margin:4px 0;padding-left:20px}
+code{background:var(--code);padding:1px 6px;border-radius:5px;font-size:14px}
+.prompts{display:grid;gap:10px;margin-top:10px}
+.prompt{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start}
+.prompt .txt{flex:1}
+.prompt .what{font-size:13px;color:var(--mute);margin-top:2px}
+.copy{font:inherit;font-size:13px;flex:none;border:1px solid var(--accent);color:var(--accent);background:transparent;padding:5px 12px;border-radius:8px;cursor:pointer;min-width:74px}
+.copy.done{background:var(--accent);color:#fff}
+.level{display:flex;align-items:baseline;gap:10px;margin:26px 0 4px}
+.level span{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--accent);text-transform:uppercase}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+@media(max-width:700px){.grid2{grid-template-columns:1fr}.step{grid-template-columns:1fr}.num{width:36px;height:36px;font-size:17px}}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.box ul{margin:4px 0;padding-left:20px}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:8px}
+.faq summary{cursor:pointer;font-weight:600}
+img.shot{width:100%;max-height:420px;object-fit:cover;object-position:top;border-radius:12px;border:1px solid var(--line);margin-top:12px;display:block}
+.path{word-break:break-all}
+footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);color:var(--mute);font-size:14px}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<main>
+<div class="badge">Cài đặt thành công</div>
+<h1>Bắt đầu soi quảng cáo đối thủ trong 3 bước</h1>
+<p class="sub">Trang này mở tự động sau khi cài. Muốn xem lại: bấm biểu tượng <b>"Hướng dẫn Meta Ads Library"</b> ngoài Desktop.</p>
+
+<div class="alert warn">
+  <b>Không gõ từ khóa vào cửa sổ đen của bộ cài.</b> Cửa sổ đó chỉ để cài đặt, đóng đi được rồi.
+  Từ khóa và mọi yêu cầu được <b>gõ vào ô chat của Claude Code hoặc Codex</b>, bằng tiếng Việt bình thường như nhắn tin.
+</div>
+
+<div class="steps">
+  <section class="step">
+    <div class="num">1</div>
+    <div>
+      <h3>Tắt hẳn Claude Code / Codex rồi mở lại</h3>
+      <p>Bắt buộc làm <b>1 lần</b> sau khi cài. Agent chỉ nhận skill mới khi mở phiên mới. Nếu agent chưa từng mở thì bỏ qua bước này.</p>
+      <p class="sub" style="margin:4px 0 0">Đang dùng app: đóng app rồi mở lại, hoặc bấm tạo phiên/chat mới. Đang dùng cửa sổ dòng lệnh: đóng cửa sổ đó.</p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="num">2</div>
+    <div>
+      <h3>Mở agent để chat</h3>
+      <p>Chọn cách bạn đang dùng:</p>
+      <div class="tabs" role="tablist">
+        <button role="tab" aria-selected="true" data-p="p1">Biểu tượng ngoài Desktop</button>
+        <button role="tab" aria-selected="false" data-p="p2">App Claude</button>
+        <button role="tab" aria-selected="false" data-p="p3">App Codex</button>
+        <button role="tab" aria-selected="false" data-p="p4">Cửa sổ dòng lệnh</button>
+      </div>
+      <div class="panel on" id="p1"><ol>
+        <li>Ra Desktop, bấm đúp biểu tượng <b>"Soi ads doi thu (Claude Code)"</b> hoặc <b>"Soi ads doi thu (Codex)"</b>.</li>
+        <li>Một cửa sổ đen mở ra và tự chạy agent. Lần đầu có thể phải đăng nhập tài khoản Claude/ChatGPT.</li>
+        <li>Khi thấy ô nhập có dấu <code>&gt;</code> là gõ được.</li>
+      </ol><p class="sub">Không thấy biểu tượng: máy chưa cài Claude Code/Codex dạng dòng lệnh, dùng cách App bên cạnh.</p></div>
+      <div class="panel" id="p2"><ol>
+        <li>Mở app <b>Claude</b> trên máy tính, chọn tab <b>Code</b>.</li>
+        <li>Tạo phiên mới, chọn thư mục làm việc bất kỳ (ví dụ thư mục cài skill: <code class="path" data-root></code>).</li>
+        <li>Gõ yêu cầu vào ô chat ở dưới cùng.</li>
+      </ol></div>
+      <div class="panel" id="p3"><ol>
+        <li>Mở app <b>Codex</b> trên máy tính.</li>
+        <li>Tạo cuộc trò chuyện mới (chọn thư mục làm việc bất kỳ nếu app hỏi).</li>
+        <li>Gõ yêu cầu vào ô chat ở dưới cùng.</li>
+      </ol></div>
+      <div class="panel" id="p4"><ol>
+        <li>Bấm nút <b>Start</b> (Windows), gõ <code>cmd</code>, nhấn Enter.</li>
+        <li>Gõ <code>claude</code> (hoặc <code>codex</code>) rồi nhấn Enter.</li>
+        <li>Khi thấy ô nhập có dấu <code>&gt;</code> là gõ được.</li>
+      </ol></div>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="num">3</div>
+    <div>
+      <h3>Dán câu đầu tiên vào ô chat, nhấn Enter</h3>
+      <p>Bấm <b>Copy</b>, dán vào ô chat (Ctrl+V), đổi tên ngành nếu muốn, nhấn Enter:</p>
+      <div class="prompts">
+        <div class="prompt"><div class="txt">Soi đối thủ ngành nến thơm, cho anh top 10 ad thắng và phân tích hook, offer.</div><button class="copy">Copy</button></div>
+      </div>
+      <p style="margin-top:10px">Chờ khoảng <b>1-3 phút</b>. Agent sẽ <b>xin phép chạy lệnh</b> vài lần: chọn <b>Yes / Allow / Cho phép</b> (có lựa chọn "luôn cho phép" thì chọn để khỏi hỏi lại).</p>
+    </div>
+  </section>
+</div>
+
+<h2>Kết quả bạn sẽ nhận được</h2>
+<p class="sub">Agent trả lời ngay trong ô chat: bảng ad thắng, kiểu hook, offer, đề xuất góc test. Muốn có trang báo cáo đẹp như dưới thì xem cấp 3.</p>
+<img class="shot" src="docs/bao-cao-tong-quan.jpg" alt="Ví dụ báo cáo soi đối thủ" loading="lazy" onerror="this.remove()">
+
+<h2>Câu lệnh mẫu: từ dễ đến khai thác sâu</h2>
+<p class="sub">Thay phần trong [ngoặc vuông] bằng ngành, sản phẩm của bạn. Không cần đúng từng chữ, agent hiểu ý.</p>
+
+<div class="level"><span>Cấp 1</span><h3>Làm quen: xem thị trường</h3></div>
+<div class="prompts">
+  <div class="prompt"><div class="txt">Soi ngách [mỹ phẩm thuần chay], cho em top 10 ad chạy lâu nhất và phân tích.<div class="what">Tìm ad đang ra tiền của ngách</div></div><button class="copy">Copy</button></div>
+  <div class="prompt"><div class="txt">Đối thủ ngành [máy lọc nước] đang chạy quảng cáo gì? Hook nào, giá bao nhiêu, quà tặng gì?<div class="what">Nắm nhanh bức tranh chung</div></div><button class="copy">Copy</button></div>
+</div>
+
+<div class="level"><span>Cấp 2</span><h3>Biết rõ đối thủ</h3></div>
+<div class="prompts">
+  <div class="prompt"><div class="txt">Ngách [đồ ăn vặt] có những page nào chạy ads mạnh nhất? Xếp hạng giúp em.<div class="what">Biết đối thủ là ai</div></div><button class="copy">Copy</button></div>
+  <div class="prompt"><div class="txt">Quét toàn bộ quảng cáo của page [dán link page Facebook], kể cả ad đã tắt. Họ đang test gì, giữ ad nào lâu nhất?<div class="what">Soi kỹ 1 đối thủ</div></div><button class="copy">Copy</button></div>
+</div>
+
+<div class="level"><span>Cấp 3</span><h3>Đào sâu và lưu lại</h3></div>
+<div class="prompts">
+  <div class="prompt"><div class="txt">Soi landing page của các ad chạy về website trong ngách [hồng sâm]: giá, combo, cách chốt đơn.<div class="what">Xem trọn phễu bán hàng của đối thủ</div></div><button class="copy">Copy</button></div>
+  <div class="prompt"><div class="txt">Tải ảnh và video của top 10 ad về máy cho em.<div class="what">Lưu creative làm moodboard (link Facebook chỉ sống vài ngày)</div></div><button class="copy">Copy</button></div>
+  <div class="prompt"><div class="txt">Xuất báo cáo HTML có ảnh cho ngách [nến thơm] để em gửi khách.<div class="what">Trang báo cáo đẹp, mở bằng trình duyệt</div></div><button class="copy">Copy</button></div>
+</div>
+
+<div class="level"><span>Cấp 4</span><h3>Biến insight thành quảng cáo của bạn</h3></div>
+<div class="prompts">
+  <div class="prompt"><div class="txt">Ngách [phụ kiện xe VF3] còn góc nào chưa ai khai thác? Đề xuất 3 góc test cho shop em: [sản phẩm, giá, khách hàng].<div class="what">Tìm khoảng trống thị trường</div></div><button class="copy">Copy</button></div>
+  <div class="prompt"><div class="txt">Từ các ad thắng ngách [nến thơm], viết 10 hook và 2 kịch bản video 15 giây cho sản phẩm của em: [mô tả sản phẩm, giá].<div class="what">Ra luôn nội dung để quay, để chạy</div></div><button class="copy">Copy</button></div>
+</div>
+
+<div class="level"><span>Cấp 5</span><h3>Tự động theo dõi mỗi ngày</h3></div>
+<div class="prompts">
+  <div class="prompt"><div class="txt">Theo dõi ngách [nến thơm] và 5 đối thủ mạnh nhất, quét mỗi sáng 8h, báo em ad mới và ad đối thủ đã tắt.<div class="what">Máy tự quét, sáng ra đọc báo cáo</div></div><button class="copy">Copy</button></div>
+  <div class="prompt"><div class="txt">Đối thủ có gì mới không?<div class="what">Hỏi lại bất cứ lúc nào sau khi đã bật theo dõi</div></div><button class="copy">Copy</button></div>
+</div>
+
+<h2>Mẹo để kết quả tốt hơn</h2>
+<div class="grid2">
+  <div class="box"><h3>Chọn từ khóa đúng cách</h3><ul>
+    <li>Dùng cách <b>người bán viết trong quảng cáo</b>: "hồng sâm", không phải "Panax ginseng".</li>
+    <li>Cụm từ ngắn 2-3 chữ ra nhiều ad hơn cụm dài.</li>
+    <li>Ngách nhiều cách gọi: bảo agent "quét cả [cách gọi 1] và [cách gọi 2] rồi gộp lại".</li>
+  </ul></div>
+  <div class="box"><h3>Nói rõ sản phẩm của bạn</h3><ul>
+    <li>Giá bao nhiêu, bán cho ai, chốt qua tin nhắn hay website.</li>
+    <li>Không nói thì agent sẽ hỏi trước khi đề xuất góc test hoặc viết hook.</li>
+    <li>Kết quả lẫn ad lạc đề: nói "chỉ giữ ad liên quan đến [ngành]".</li>
+  </ul></div>
+</div>
+
+<h2>File kết quả nằm ở đâu?</h2>
+<div class="box"><p>Mọi dữ liệu, báo cáo, ảnh/video tải về nằm trong thư mục:</p><p><code class="path" data-root-out></code></p>
+<p class="sub">Báo cáo HTML: mở file <code>index.html</code> trong thư mục <code>report-...</code>. Ảnh/video: thư mục <code>creative</code>.</p></div>
+
+<h2>Gặp vấn đề?</h2>
+<div class="faq">
+  <details><summary>Agent trả lời chung chung, không chạy tool</summary><p>Agent chưa nhận skill. Tắt hẳn agent rồi mở lại (bước 1), hoặc nói rõ: <code>Dùng skill meta-ads-library để soi ngách [...]</code>.</p></details>
+  <details><summary>Agent cứ hỏi xin phép chạy lệnh</summary><p>Bình thường: agent cần chạy tool trên máy bạn. Chọn Yes / Allow. Có nút "luôn cho phép" (always allow / don't ask again) thì chọn để đỡ hỏi.</p></details>
+  <details><summary>Chạy lâu quá</summary><p>Mỗi từ khóa mất 30-90 giây, quét nhiều từ khóa hoặc soi landing page có thể 3-5 phút. Cứ để agent chạy, đừng tắt cửa sổ.</p></details>
+  <details><summary>Ra 0 quảng cáo hoặc ra ít</summary><p>Đổi cách gọi khác phổ biến hơn. Vẫn 0 với mọi từ khóa: nói với agent "chạy npm run doctor" để kiểm tra máy, rồi gửi kết quả vào nhóm Zalo.</p></details>
+  <details><summary>Có cần chạy lại bộ cài không?</summary><p>Không, chỉ cài 1 lần. Chỉ chạy lại <code>cai-dat.bat</code> khi: chuyển thư mục cài sang chỗ khác, tải bản mới về, hoặc cài lỗi.</p></details>
+</div>
+
+<footer>
+  Cần hỗ trợ: nhóm Zalo <a href="https://zalo.me/g/37yoic8thaeho75yicnb" target="_blank" rel="noopener">Ads AI lo - Tự động hóa quảng cáo</a>.
+  Mã nguồn: <a href="https://github.com/cuongbigdigi/meta-ads-library-skill" target="_blank" rel="noopener">github.com/cuongbigdigi/meta-ads-library-skill</a>
+</footer>
+</main>
+<script>
+// Hiện đường dẫn thật của thư mục cài (trang mở bằng file:// ngay trong thư mục đó)
+try {
+  const dir = decodeURIComponent(location.pathname).replace(/^\/([A-Za-z]:)/, '$1').replace(/\/[^/]*$/, '').replace(/\//g, '\\');
+  document.querySelectorAll('[data-root]').forEach(e => e.textContent = dir);
+  document.querySelectorAll('[data-root-out]').forEach(e => e.textContent = dir + '\\output');
+} catch (e) {}
+
+document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => {
+  b.parentNode.querySelectorAll('button').forEach(x => x.setAttribute('aria-selected', x === b));
+  b.closest('div').parentNode.querySelectorAll('.panel').forEach(p => p.classList.toggle('on', p.id === b.dataset.p));
+}));
+
+function copyText(t) {
+  if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(t);
+  const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select();
+  try { document.execCommand('copy'); } finally { a.remove(); }
+  return Promise.resolve();
+}
+document.querySelectorAll('.copy').forEach(btn => btn.addEventListener('click', () => {
+  const box = btn.parentNode.querySelector('.txt');
+  const t = (box.childNodes[0].textContent || box.textContent).trim();
+  copyText(t).then(() => { btn.textContent = 'Đã copy'; btn.classList.add('done'); setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('done'); }, 1800); });
+}));
+</script>
+</body>
+</html>
